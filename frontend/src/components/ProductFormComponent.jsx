@@ -1,47 +1,155 @@
-import React from 'react';
-import { Button, Label, TextInput } from "flowbite-react";
+import React, { useState, useEffect } from 'react';
+import { Button, Label, TextInput, Textarea } from "flowbite-react";
 
-export default function ProductFormComponent() {
+export default function ProductFormComponent({ onSubmit, initialData }) {
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        price: 0,
+        category: '',
+        inStock: 0
+    });
+
+    const [imageFile, setImageFile] = useState(null);
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                name: initialData.name || '',
+                description: initialData.description || '',
+                price: initialData.price || 0,
+                category: initialData.category || '',
+                inStock: initialData.inStock || 0
+            });
+        }
+    }, [initialData]);
+
+    const handleChange = (e) => {
+        const { name, value, type, files } = e.target;
+        if (type === 'file') {
+            setImageFile(files[0]);
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: type === 'number' ? Number(value) : value
+            }));
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const productData = new FormData();
+        
+        for (const key in formData) {
+            productData.append(key, formData[key]);
+        }
+        
+        // Aggiungi l'immagine solo se è stata selezionata una nuova immagine
+        if (imageFile) {
+            productData.append('image', imageFile);
+        }
+        
+        // Se stiamo aggiornando un prodotto esistente, aggiungi l'ID
+        if (initialData && initialData._id) {
+            productData.append('_id', initialData._id);
+        }
+        
+        console.log('Submitting product data:');
+        for (let [key, value] of productData.entries()) {
+            console.log(key, value);
+        }
+        
+        onSubmit(productData);
+        
+        // Reset del form dopo l'invio
+        setFormData({
+            name: '',
+            description: '',
+            price: 0,
+            category: '',
+            inStock: 0
+        });
+        setImageFile(null);
+    };
 
     return (
-        <form className="flex max-w-4xl flex-col gap-4 px-8 py-6">
+        <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col gap-4 px-8 py-6">
             <div>
-                <div className="mb-2 block">
-                    <Label htmlFor="name" value="Nome" />
-                </div>
-                <TextInput id="name" type="text" placeholder="Inserisci il nome del prodotto" required shadow />
+                <Label htmlFor="name" value="Nome" />
+                <TextInput
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Inserisci il nome del prodotto"
+                    required
+                />
             </div>
             <div>
-                <div className="mb-2 block">
                 <Label htmlFor="image" value="Immagine di copertina" />
-                </div>
-                <TextInput id="image" type="text" placeholder="Inserisci un'immagine di copertina" required shadow />
+                <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    onChange={handleChange}
+                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                />
+                {initialData && initialData.image && (
+                    <img src={initialData.image} alt="Current product" className="mt-2 max-w-xs" />
+                )}
             </div>
             <div>
-                <div className="mb-2 block">
                 <Label htmlFor="description" value="Descrizione" />
-                </div>
-                <TextInput id="description" type="text" placeholder="Inserisci una descrizione" required shadow />
+                <Textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Inserisci una descrizione"
+                    required
+                />
             </div>
             <div>
-                <div className="mb-2 block">
                 <Label htmlFor="price" value="Prezzo" />
-                </div>
-                <TextInput id="price" type="number" placeholder="Inserisci il prezzo" required shadow />
+                <TextInput
+                    id="price"
+                    name="price"
+                    type="number"
+                    min={0.01}
+                    step={0.01}
+                    value={formData.price}
+                    onChange={handleChange}
+                    placeholder="Inserisci il prezzo"
+                    required
+                />
             </div>
             <div>
-                <div className="mb-2 block">
                 <Label htmlFor="category" value="Categoria" />
-                </div>
-                <TextInput id="category" type="text" placeholder="Inserisci la categoria" required shadow />
+                <TextInput
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    placeholder="Inserisci la categoria"
+                    required
+                />
             </div>
             <div>
-                <div className="mb-2 block">
                 <Label htmlFor="inStock" value="In Stock" />
-                </div>
-                <TextInput id="inStock" type="number" min={0} shadow />
+                <TextInput
+                    id="inStock"
+                    name="inStock"
+                    type="number"
+                    min={0}
+                    value={formData.inStock}
+                    onChange={handleChange}
+                    placeholder="Inserisci la quantità disponibile"
+                    required
+                />
             </div>
-            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Crea</Button>
+            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">
+                {initialData ? 'Aggiorna' : 'Crea'}
+            </Button>
         </form>
-    )
+    );
 }

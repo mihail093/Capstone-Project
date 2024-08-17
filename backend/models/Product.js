@@ -1,5 +1,24 @@
 import {Schema, model} from "mongoose";
 
+// Definisco lo Schema per i commenti/recensioni per ogni prodotto
+const commentSchema = new Schema({
+    text: { 
+        type: String, 
+        required: true 
+    },
+    rating: { 
+        type: Number, 
+        required: true, 
+        min: 1, 
+        max: 5 
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
+});
+
 // Definisco lo Schema per tutti i prodotti che non sono piante 
 const productSchema = new Schema({
     name: { 
@@ -25,19 +44,15 @@ const productSchema = new Schema({
         required: true 
     },
     inStock: { 
-        type: Boolean, 
-        default: true 
-    }
+        type: Number, 
+        default: 0, 
+        min: 0 
+    },
+    comments: [commentSchema]
 }, {
     timestamps: true,
     collection: "products"
 })
-
-// Aggiungo un pre-save hook per gestire la data dell'aggiornamento
-productSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    next();
-});
 
 const Product = model('Product', productSchema);
 

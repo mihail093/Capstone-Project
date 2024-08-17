@@ -30,27 +30,79 @@ router.get('/:id', async (req, res) => {
 // POST crea una nuova pianta
 router.post('/', cloudinaryUploader.single('image'), async (req, res) => {
   try {
-    const plantData = req.body;
-    if(req.file) {
-      plantData.image = req.file.path
+    const { name, scientificName, description, price, habitat, inStock } = req.body;
+    
+    // Gestisci careInstructions
+    const careInstructions = {
+      light: req.body['careInstructions.light'],
+      water: req.body['careInstructions.water'],
+      soil: req.body['careInstructions.soil'],
+      temperature: req.body['careInstructions.temperature']
+    };
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'L\'immagine è obbligatoria' });
     }
+
+    const plantData = {
+      name,
+      scientificName,
+      description,
+      price: Number(price),
+      careInstructions,
+      habitat,
+      inStock: Number(inStock),
+      image: req.file.path
+    };
+
     const newPlant = new Plant(plantData);
     const savedPlant = await newPlant.save();
     res.status(201).json(savedPlant);
   } catch (error) {
+    console.error('Errore nella creazione della pianta:', error);
     res.status(400).json({ message: 'Errore nella creazione della pianta', error: error.message });
   }
 });
 
 // PUT aggiorna una pianta esistente
-router.put('/:id', async (req, res) => {
+router.put('/:id', cloudinaryUploader.single('image'), async (req, res) => {
   try {
-    const updatedPlant = await Plant.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    console.log('Received update data:', req.body);
+    const { id } = req.params;
+    const { name, scientificName, description, price, habitat, inStock } = req.body;
+    
+    // Gestisci careInstructions
+    const careInstructions = {
+      light: req.body['careInstructions.light'],
+      water: req.body['careInstructions.water'],
+      soil: req.body['careInstructions.soil'],
+      temperature: req.body['careInstructions.temperature']
+    };
+
+    const updateData = {
+      name,
+      scientificName,
+      description,
+      price: Number(price),
+      careInstructions,
+      habitat,
+      inStock: Number(inStock)
+    };
+    
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
+    const updatedPlant = await Plant.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+    
     if (!updatedPlant) {
       return res.status(404).json({ message: 'Pianta non trovata' });
     }
+
+    console.log('Updated plant:', updatedPlant);
     res.json(updatedPlant);
   } catch (error) {
+    console.error('Error updating plant:', error);
     res.status(400).json({ message: 'Errore nell\'aggiornamento della pianta', error: error.message });
   }
 });

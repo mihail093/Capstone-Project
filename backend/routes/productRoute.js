@@ -43,14 +43,30 @@ router.post('/', cloudinaryUploader.single('image'), async (req, res) => {
 });
 
 // PUT aggiorna un prodotto esistente
-router.put('/:id', async (req, res) => {
+router.put('/:id', cloudinaryUploader.single('image'), async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    console.log('Received update data:', req.body);
+    const { id } = req.params;
+    const updateData = { ...req.body };
+    
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
+    // Converti esplicitamente price e inStock in numeri
+    if (updateData.price) updateData.price = Number(updateData.price);
+    if (updateData.inStock) updateData.inStock = Number(updateData.inStock);
+
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+    
     if (!updatedProduct) {
       return res.status(404).json({ message: 'Prodotto non trovato' });
     }
+
+    console.log('Updated product:', updatedProduct);
     res.json(updatedProduct);
   } catch (error) {
+    console.error('Error updating product:', error);
     res.status(400).json({ message: 'Errore nell\'aggiornamento del prodotto', error: error.message });
   }
 });
@@ -85,6 +101,34 @@ router.get('/search/:query', async (req, res) => {
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Errore nella ricerca dei prodotti', error: error.message });
+  }
+});
+
+// POST aggiungi un commento ad un prodotto
+router.post('/:id/comments', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Prodotto non trovato' });
+    }
+    product.comments.push(req.body);
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ message: 'Errore nell\'aggiunta del commento', error: error.message });
+  }
+});
+
+// GET tutti i commenti di un prodotto
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Prodotto non trovato' });
+    }
+    res.json(product.comments);
+  } catch (error) {
+    res.status(500).json({ message: 'Errore nel recupero dei commenti', error: error.message });
   }
 });
 

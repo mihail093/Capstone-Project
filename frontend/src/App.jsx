@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Backoffice from './pages/Backoffice';
+import ProductDetails from './pages/ProductDetails';
+import PlantDetails from './pages/PlantDetails';
 import './App.css';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/backoffice' element={<Backoffice />} />
+        <Route path='/product/details/:id' element={<ProductDetails />} />
+        <Route path='/plant/details/:id' element={<PlantDetails />} />
       </Routes>
       <FooterComponent></FooterComponent>
     </BrowserRouter>

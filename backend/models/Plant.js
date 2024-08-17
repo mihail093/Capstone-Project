@@ -75,12 +75,6 @@ const plantSchema = new Schema({
     collection: "plants"
 });
 
-// Aggiungo un pre-save hook per gestire la data dell'aggiornamento
-plantSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    next();
-});
-
 const Plant = model('Plant', plantSchema);
 
 export default Plant;
