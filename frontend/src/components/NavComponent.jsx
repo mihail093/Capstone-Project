@@ -5,11 +5,19 @@ import { Link } from 'react-router-dom';
 
 export default function NavComponent() {
     return (
-        <Navbar fluid className='bg-myGreen'>
-            <Navbar.Brand as={Link} to='/'>
-                <img src={logo} className='mr-3 h-6 sm:h-9 border-2 border-red-600' alt='La Sughera Logo' />
-                <span className='self-center whitespace-nowrap text-xl font-dancingScript text-red-500'>La Sughera</span>
-            </Navbar.Brand>
+        <Navbar fluid className='bg-myGreen py-4'>
+            <div className="flex items-center">
+                <Navbar.Brand as={Link} to='/'>
+                    <img 
+                        src={logo} 
+                        className='w-24 h-24 border-2 border-red-600' 
+                        alt='La Sughera Logo' 
+                    />
+                </Navbar.Brand>
+                <h1 className='text-3xl font-dancingScript text-red-500 ml-2 cursor-default'>
+                    La Sughera
+                </h1>
+            </div>
             <div className='flex md:order-2'>
                 <Dropdown
                     arrowIcon={false}
@@ -31,11 +39,11 @@ export default function NavComponent() {
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Link to='/' className='text-myBeige hover:underline py-2 pl-3 pr-4'>Home</Link>
-                <Link to='/about' className='text-myBeige hover:underline py-2 pl-3 pr-4'>About</Link>
-                <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4'>Pricing</Link>
-                <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4'>Contact</Link>
-                <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4'>Back office</Link>
+                <Link to='/' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Home</Link>
+                <Link to='/about' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Chi Siamo</Link>
+                <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Prodotti</Link>
+                <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Contatti</Link>
+                <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
             </Navbar.Collapse>
         </Navbar>
     )

@@ -173,7 +173,7 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
             </div>
             <div>
                 <Label htmlFor="careInstructions.light" value="Luce" />
-                <TextInput 
+                <Textarea 
                     id="careInstructions.light"
                     name="careInstructions.light"
                     value={formData.careInstructions.light}
@@ -185,7 +185,7 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
             </div>
             <div>
                 <Label htmlFor="careInstructions.water" value="Acqua" />
-                <TextInput 
+                <Textarea 
                     id="careInstructions.water" 
                     name="careInstructions.water"
                     value={formData.careInstructions.water}
@@ -197,7 +197,7 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
             </div>
             <div>
                 <Label htmlFor="careInstructions.soil" value="Terreno" />
-                <TextInput 
+                <Textarea 
                     id="careInstructions.soil" 
                     name="careInstructions.soil"
                     value={formData.careInstructions.soil}
@@ -208,7 +208,7 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
             </div>
             <div>
                 <Label htmlFor="careInstructions.temperature" value="Temperatura" />
-                <TextInput 
+                <Textarea 
                     id="careInstructions.temperature" 
                     name="careInstructions.temperature"
                     value={formData.careInstructions.temperature}

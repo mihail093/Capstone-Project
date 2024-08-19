@@ -16,7 +16,7 @@ export default {
         'dancingScript': ['Dancing Script', 'cursive'],
       },
       colors: {
-        'myBeige': '#FFDAA9',
+        'myBeige': '#F0E4D4',
         'myGreen': '#15372C',
         'myLightGreen': '#1E4F3F',
       }

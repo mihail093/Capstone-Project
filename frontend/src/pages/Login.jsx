@@ -4,26 +4,28 @@ import logo from '../assets/LOGO.jpg';
 
 export default function Login() {
   return (
-    <div className='max-w-4xl mx-auto py-16 text-center'>
-        <h1 className='text-4xl sm:text-5xl font-title mb-6'>
-              <span className='font-dancingScript text-red-800'>La Sughera</span> Il Vostro Angolo di Verde
+    <div className='flex flex-col justify-center items-center w-full h-screen mx-auto py-16 text-center bg-cover bg-no-repeat'
+         style={{ 
+           backgroundImage: `url(${logo})`, 
+           backgroundPosition: 'center 18%',
+           backgroundSize: '114%' 
+         }}>
+      <div className="bg-myBeige bg-opacity-10 p-8 rounded-lg">
+        <h1 className='text-4xl sm:text-5xl font-dancingScript text-red-500 mb-6'>
+          La Sughera
         </h1>
-        <img src={logo} alt='Logo' className='w-1/4 h-1/4 mx-auto mb-8' />
-        <form className="flex max-w-4xl flex-col gap-4 px-8 py-6">
-            <div>
-                <div className="mb-2 block">
-                    <Label htmlFor="email2" value="Email" />
-                </div>
-                <TextInput id="email2" type="email" placeholder="Inserisci l'email" required shadow />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                <Label htmlFor="password2" value="Password" />
-                </div>
-                <TextInput id="password2" type="password" placeholder="Inserisci la password" required shadow />
-            </div>
-            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Accedi</Button>
+        <form className="flex max-w-4xl flex-col justify-center items-center gap-4">
+          <div>
+            <Label className='text-white' htmlFor="email2" value="Email" />
+            <TextInput id="email2" type="email" placeholder="Inserisci l'email" required shadow />
+          </div>
+          <div>
+            <Label className='text-white' htmlFor="password2" value="Password" />
+            <TextInput id="password2" type="password" placeholder="Inserisci la password" required shadow />
+          </div>
+          <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Accedi</Button>
         </form>
+      </div>
     </div>
   )
 }

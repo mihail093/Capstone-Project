@@ -5,55 +5,55 @@ import { Link } from 'react-router-dom';
 
 export default function Register() {
   return (
-    <div className='max-w-4xl mx-auto py-16 text-center'>
-        <h1 className='text-4xl sm:text-5xl font-title mb-6'>
-              <span className='font-dancingScript text-red-800'>La Sughera</span> Il Vostro Angolo di Verde
+    <div className='flex flex-col justify-center items-center w-full h-screen mx-auto py-16 text-center bg-cover bg-no-repeat'
+         style={{ 
+           backgroundImage: `url(${logo})`, 
+           backgroundPosition: 'center 18%',
+           backgroundSize: '114%' 
+         }}>
+      <div className="bg-myBeige bg-opacity-10 p-8 rounded-lg">
+        <h1 className='text-4xl sm:text-5xl font-dancingScript text-red-500 mb-6'>
+          La Sughera
         </h1>
-        <img src={logo} alt='Logo' className='w-1/4 h-1/4 mx-auto mb-8' />
-        <form className="flex max-w-4xl flex-col gap-4 px-8 py-6">
-            <div>
-                <div className="mb-2 block">
-                    <Label htmlFor="email2" value="Email" />
-                </div>
-                <TextInput id="email2" type="email" placeholder="Inserisci l'email" required shadow />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                <Label htmlFor="password2" value="Password" />
-                </div>
-                <TextInput id="password2" type="password" placeholder="Inserisci la password" required shadow />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                <Label htmlFor="repeat-password" value="Inserisci nuovamente la password" />
-                </div>
-                <TextInput id="repeat-password" type="password" placeholder="Inserisci la password" required shadow />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                    <Label htmlFor="name" value="Nome" />
-                </div>
-                <TextInput id="name" type="text" placeholder="Il tuo nome (facoltativo)" shadow />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                    <Label htmlFor="surname" value="Cognome" />
-                </div>
-                <TextInput id="surname" type="text" placeholder="Il tuo cognome (facoltativo)" shadow />
+        <form className="flex max-w-4xl flex-col justify-center items-center gap-4">
+          <div>
+            <Label className='text-white' htmlFor="email2" value="Email" />
+            <TextInput id="email2" type="email" placeholder="Inserisci l'email" required shadow />
+          </div>
+          <div>
+            <Label className='text-white' htmlFor="password2" value="Password" />
+            <TextInput id="password2" type="password" placeholder="Inserisci la password" required shadow />
+          </div>
+          <div>
+            <Label className='text-white' htmlFor="repeat-password" value="Conferma Password" />
+            <TextInput id="repeat-password" type="password" placeholder="Conferma la password" required shadow />
+          </div>
+          <div>
+            <Label className='text-white' htmlFor="name" value="Nome" />
+            <TextInput id="name" type="text" placeholder="Il tuo nome (facoltativo)" shadow />
+          </div>
+          <div>
+            <Label className='text-white' htmlFor="surname" value="Cognome" />
+            <TextInput id="surname" type="text" placeholder="Il tuo cognome (facoltativo)" shadow />
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-start gap-4 w-full">
+            <div className="flex items-center gap-2">
+              <Checkbox id="agree" />
+              <Label htmlFor="agree" className="flex text-white">
+                Accetto&nbsp;
+                <Link to="#" className="text-white hover:underline dark:text-cyan-500">
+                  termini e condizioni
+                </Link>
+              </Label>
             </div>
             <div className="flex items-center gap-2">
-                <Checkbox id="agree" />
-                <Label htmlFor="agree" className="flex">
-                    Accetto&nbsp;
-                    <Link href="#" className="text-myGreen hover:underline dark:text-cyan-500">
-                        termini e condizioni
-                    </Link>
-                </Label>
-                <Checkbox id="age" />
-                <Label htmlFor="age">Ho 18 anni o più</Label>
+              <Checkbox id="age" />
+              <Label htmlFor="age" className="text-white">Ho 18 anni o più</Label>
             </div>
-            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Registrati</Button>
+          </div>
+          <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Registrati</Button>
         </form>
+      </div>
     </div>
   )
 }
