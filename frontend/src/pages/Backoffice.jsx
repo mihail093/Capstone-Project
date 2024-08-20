@@ -10,6 +10,26 @@ export default function Backoffice() {
     // useState per gestire l'input "habitat"
     const [habitat, setHabitat] = useState('indoor');
 
+    // useState per gestire la difficoltà nella cura della pianta
+    const [difficulty, setDifficulty] = useState('medium');
+
+    const difficultyFunction = (difficulty) => {
+        switch (difficulty) {
+            case 'medium':
+                return 'difficult';
+            case 'difficult':
+                return 'hardest';
+            case 'hardest':
+                return 'easiest';
+            case 'easiest':
+                return 'easy';
+            case 'easy':
+                return 'medium';
+            default:
+                return difficulty; 
+        }
+    }
+
     // useState per cambiare form e lista (form e lista PIANTE/ form e lista PRODOTTI)
     const [plantForm, setPlantForm] = useState(true);
 
@@ -129,7 +149,10 @@ export default function Backoffice() {
                     />
                     <PlantFormComponent 
                         habitat={habitat} 
-                        setHabitat={setHabitat} 
+                        setHabitat={setHabitat}
+                        difficulty={difficulty}
+                        setDifficulty={setDifficulty}
+                        difficultyFunction={difficultyFunction} 
                         onSubmit={handlePlantSubmit} 
                         initialData={editingPlant}
                     />

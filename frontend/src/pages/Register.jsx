@@ -11,7 +11,7 @@ export default function Register() {
            backgroundPosition: 'center 18%',
            backgroundSize: '114%' 
          }}>
-      <div className="bg-myBeige bg-opacity-10 p-8 rounded-lg">
+      <div className="bg-myBeige bg-opacity-10 p-8 rounded-lg ml-[24px]">
         <h1 className='text-4xl sm:text-5xl font-dancingScript text-red-500 mb-6'>
           La Sughera
         </h1>

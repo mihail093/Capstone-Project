@@ -57,12 +57,21 @@ const plantSchema = new Schema({
         },
         temperature: { 
             type: String 
+        },
+        difficulty: {
+            type: String,
+            enum: ['easiest', 'easy', 'medium', 'difficult', 'hardest'],
+            default: 'medium'
         }
     },
     habitat: { 
         type: String, 
         enum: ['indoor', 'outdoor'], 
         default: 'indoor' 
+    },
+    category: { 
+        type: String, 
+        required: true 
     },
     inStock: { 
         type: Number, 

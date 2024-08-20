@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Label, TextInput, Textarea } from "flowbite-react";
 
-export default function PlantFormComponent({ habitat, setHabitat, onSubmit, initialData }) {
+export default function PlantFormComponent({ habitat, setHabitat, difficulty, setDifficulty, difficultyFunction, onSubmit, initialData }) {
     const [formData, setFormData] = useState({
         name: '',
         scientificName: '',
@@ -11,9 +11,11 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
             light: '',
             water: '',
             soil: '',
-            temperature: ''
+            temperature: '',
+            difficulty: 'medium'
         },
         habitat: 'indoor',
+        category: '',
         inStock: 0
     });
 
@@ -30,9 +32,11 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
                     light: initialData.careInstructions?.light || '',
                     water: initialData.careInstructions?.water || '',
                     soil: initialData.careInstructions?.soil || '',
-                    temperature: initialData.careInstructions?.temperature || ''
+                    temperature: initialData.careInstructions?.temperature || '',
+                    difficulty: initialData.careInstructions?.difficulty || 'medium',
                 },
                 habitat: initialData.habitat || 'indoor',
+                category: initialData.category || '',
                 inStock: initialData.inStock || 0
             });
         }
@@ -57,6 +61,29 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
                 [name]: type === 'number' ? Number(value) : value
             }));
         }
+    };
+
+    // Funzione per cambiare habitat indoor/outdoor
+    const handleHabitatChange = () => {
+        const newHabitat = formData.habitat === 'indoor' ? 'outdoor' : 'indoor';
+        setFormData(prev => ({
+            ...prev,
+            habitat: newHabitat
+        }));
+        setHabitat(newHabitat);
+    };
+
+    // Funzione per cambiare difficoltà nella cura della pianta
+    const handleDifficultyChange = () => {
+        const newDifficulty = difficultyFunction(formData.careInstructions.difficulty);
+        setFormData(prev => ({
+            ...prev,
+            careInstructions: {
+                ...prev.careInstructions,
+                difficulty: newDifficulty
+            }
+        }));
+        setDifficulty(newDifficulty); // Questa funzione viene passata come prop dal componente genitore
     };
 
     const handleSubmit = (e) => {
@@ -98,9 +125,12 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
                 light: '',
                 water: '',
                 soil: '',
-                temperature: ''
+                temperature: '',
+                difficulty: 'medium'
+
             },
             habitat: 'indoor',
+            category: '',
             inStock: 0
         });
         setImageFile(null);
@@ -218,21 +248,50 @@ export default function PlantFormComponent({ habitat, setHabitat, onSubmit, init
                 />
             </div>
             <div>
+                <Label htmlFor="careInstructions.difficulty" value="Difficoltà nella cura" />
+                <TextInput 
+                    id="careInstructions.difficulty" 
+                    name="careInstructions.difficulty"
+                    value={formData.careInstructions.difficulty}
+                    onChange={handleChange}
+                    disabled
+                    shadow 
+                />
+                <Button 
+                    className='bg-myGreen hover:!bg-myLightGreen mt-2' 
+                    type="button" 
+                    onClick={handleDifficultyChange}>
+                        Cambia difficoltà
+                </Button>
+            </div>
+            <div>
                 <Label htmlFor="habitat" value="Habitat" />
                 <TextInput 
                     id="habitat"
                     name='habitat'
-                    defaultValue={formData.habitat}
-                    value={habitat}
+                    value={formData.habitat}
+                    onChange={handleChange}
                     disabled 
                     shadow 
                 />
                 <Button 
                     className='bg-myGreen hover:!bg-myLightGreen mt-2' 
                     type="button" 
-                    onClick={() => setHabitat(habitat === 'indoor' ? 'outdoor' : 'indoor')}>
+                    onClick={handleHabitatChange}>
                         Cambia habitat
                 </Button>
+            </div>
+            <div>
+                <Label htmlFor="category" value="Categoria" />
+                <TextInput 
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange} 
+                    placeholder="Inserisci la categoria della pianta" 
+                    required 
+                    shadow 
+                />
             </div>
             <div>
                 <Label htmlFor="inStock" value="In Stock" />

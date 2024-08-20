@@ -41,7 +41,7 @@ export default function NavComponent() {
             <Navbar.Collapse>
                 <Link to='/' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Home</Link>
                 <Link to='/about' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Chi Siamo</Link>
-                <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Prodotti</Link>
+                <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Piante&Prodotti</Link>
                 <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Contatti</Link>
                 <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
             </Navbar.Collapse>

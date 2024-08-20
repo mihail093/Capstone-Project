@@ -30,14 +30,15 @@ router.get('/:id', async (req, res) => {
 // POST crea una nuova pianta
 router.post('/', cloudinaryUploader.single('image'), async (req, res) => {
   try {
-    const { name, scientificName, description, price, habitat, inStock } = req.body;
+    const { name, scientificName, description, price, habitat, inStock, category } = req.body;
     
     // Gestisci careInstructions
     const careInstructions = {
       light: req.body['careInstructions.light'],
       water: req.body['careInstructions.water'],
       soil: req.body['careInstructions.soil'],
-      temperature: req.body['careInstructions.temperature']
+      temperature: req.body['careInstructions.temperature'],
+      difficulty: req.body['careInstructions.difficulty'] || 'medium'
     };
 
     if (!req.file) {
@@ -52,6 +53,7 @@ router.post('/', cloudinaryUploader.single('image'), async (req, res) => {
       careInstructions,
       habitat,
       inStock: Number(inStock),
+      category,
       image: req.file.path
     };
 
@@ -69,14 +71,15 @@ router.put('/:id', cloudinaryUploader.single('image'), async (req, res) => {
   try {
     console.log('Received update data:', req.body);
     const { id } = req.params;
-    const { name, scientificName, description, price, habitat, inStock } = req.body;
+    const { name, scientificName, description, price, habitat, inStock, category } = req.body;
     
     // Gestisci careInstructions
     const careInstructions = {
       light: req.body['careInstructions.light'],
       water: req.body['careInstructions.water'],
       soil: req.body['careInstructions.soil'],
-      temperature: req.body['careInstructions.temperature']
+      temperature: req.body['careInstructions.temperature'],
+      difficulty: req.body['careInstructions.difficulty']
     };
 
     const updateData = {
@@ -86,7 +89,8 @@ router.put('/:id', cloudinaryUploader.single('image'), async (req, res) => {
       price: Number(price),
       careInstructions,
       habitat,
-      inStock: Number(inStock)
+      inStock: Number(inStock),
+      category
     };
     
     if (req.file) {
@@ -127,6 +131,16 @@ router.get('/habitat/:habitat', async (req, res) => {
     res.json(plants);
   } catch (error) {
     res.status(500).json({ message: 'Errore nel recupero delle piante per habitat', error: error.message });
+  }
+});
+
+// GET piante per categoria
+router.get('/category/:category', async (req, res) => {
+  try {
+    const plants = await Plant.find({ category: req.params.category });
+    res.json(plants);
+  } catch (error) {
+    res.status(500).json({ message: 'Errore nel recupero delle piante per categoria', error: error.message });
   }
 });
 

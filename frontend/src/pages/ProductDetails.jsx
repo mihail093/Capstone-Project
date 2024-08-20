@@ -42,14 +42,17 @@ export default function ProductDetails() {
                         <img 
                         src={product.image} 
                         alt={product.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         />
                     </div>
                     <p className="text-gray-700 dark:text-gray-400">
                         {product.description}
                     </p>
                     <p>Categoria: {product.category}</p>
-                    <Button size='sm' className='m-2 bg-myGreen hover:!bg-myLightGreen'>{product.price} €</Button>
+                    <h4 className="text-gray-900 dark:text-white cursor-default">{product.price} €</h4>
+                    <Button size='md' className='m-auto bg-myGreen hover:!bg-myLightGreen mt-2'>
+                    Aggiungi al carrello
+                    </Button>
                 </Card>
             </div>
         </div>
