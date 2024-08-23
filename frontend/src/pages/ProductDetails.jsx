@@ -45,12 +45,12 @@ export default function ProductDetails() {
                         className="w-full h-full object-contain"
                         />
                     </div>
-                    <p className="text-gray-700 dark:text-gray-400">
+                    <p className="text-gray-700">
                         {product.description}
                     </p>
                     <p>Categoria: {product.category}</p>
-                    <h4 className="text-gray-900 dark:text-white cursor-default">{product.price} €</h4>
-                    <Button size='md' className='m-auto bg-myGreen hover:!bg-myLightGreen mt-2'>
+                    <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
+                    <Button size='md' color="primary" className='m-auto mt-2'>
                     Aggiungi al carrello
                     </Button>
                 </Card>

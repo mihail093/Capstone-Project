@@ -26,9 +26,9 @@ export default function NavComponent() {
                     <Avatar className='me-2' alt='User settings' rounded />
                     }
                 >
-                    <Dropdown.Header>
-                        <span className='block text-sm'>Bonnie Green</span>
-                        <span className='block truncate text-sm font-medium'>name@flowbite.com</span>
+                    <Dropdown.Header className='text-sm cursor-default'>
+                        <span className='block'>Bonnie Green</span>
+                        <span className='block truncate font-medium'>name@flowbite.com</span>
                     </Dropdown.Header>
                     <Dropdown.Item as={Link} to="/dashboard">Dashboard</Dropdown.Item>
                     <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>

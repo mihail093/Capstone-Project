@@ -26,8 +26,8 @@ export default function ProductListComponent({ products, onEdit, onDelete }) {
                         <Table.Cell>{product.price}</Table.Cell>
                         <Table.Cell>{product.category}</Table.Cell>
                         <Table.Cell>
-                            <Button size='xs' className='my-1 bg-myGreen hover:!bg-myLightGreen' onClick={() => onEdit(product)}>Modifica</Button>
-                            <Button size='xs' className='my-1 bg-myGreen hover:!bg-myLightGreen' onClick={() => onDelete(product._id)}>Elimina</Button>
+                            <Button size='xs' color="primary" className='my-1' onClick={() => onEdit(product)}>Modifica</Button>
+                            <Button size='xs' color="primary" className='my-1' onClick={() => onDelete(product._id)}>Elimina</Button>
                         </Table.Cell>
                     </Table.Row>
                 ))}

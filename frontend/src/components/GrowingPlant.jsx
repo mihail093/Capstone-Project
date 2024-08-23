@@ -1,5 +1,5 @@
 import React from 'react';
-import './GrowingPlant.css'; // Assicurati di creare questo file CSS
+import './GrowingPlant.css';
 import vaso from '../assets/OIP-removebg-preview.png';
 
 const GrowingPlant = () => {

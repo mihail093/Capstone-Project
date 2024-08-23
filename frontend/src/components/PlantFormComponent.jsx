@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Label, TextInput, Textarea } from "flowbite-react";
+import { Button, Label, TextInput, Textarea, Radio } from "flowbite-react";
 
 export default function PlantFormComponent({ habitat, setHabitat, difficulty, setDifficulty, difficultyFunction, onSubmit, initialData }) {
     const [formData, setFormData] = useState({
@@ -15,7 +15,7 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
             difficulty: 'medium'
         },
         habitat: 'indoor',
-        category: '',
+        category: 'succulentiResistenti',
         inStock: 0
     });
 
@@ -36,7 +36,7 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                     difficulty: initialData.careInstructions?.difficulty || 'medium',
                 },
                 habitat: initialData.habitat || 'indoor',
-                category: initialData.category || '',
+                category: initialData.category || 'succulentiResistenti',
                 inStock: initialData.inStock || 0
             });
         }
@@ -46,6 +46,11 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
         const { name, value, type, files } = e.target;
         if (type === 'file') {
             setImageFile(files[0]);
+        } else if (type === 'radio') {
+            setFormData(prev => ({
+                ...prev,
+                category: value
+            }));
         } else if (name.startsWith('careInstructions.')) {
             const [, field] = name.split('.');
             setFormData(prev => ({
@@ -130,7 +135,7 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
 
             },
             habitat: 'indoor',
-            category: '',
+            category: 'succulentiResistenti',
             inStock: 0
         });
         setImageFile(null);
@@ -168,7 +173,7 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                     name="image"
                     type="file"
                     onChange={handleChange}
-                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    className="block w-full text-sm text-gray-900 border border-gray-500 rounded-lg cursor-pointer bg-blue-50"
                 />
                 {initialData && initialData.image && (
                     <img src={initialData.image} alt="Current product" className="mt-2 max-w-xs" />
@@ -258,7 +263,8 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                     shadow 
                 />
                 <Button 
-                    className='bg-myGreen hover:!bg-myLightGreen mt-2' 
+                    color="primary"
+                    className='mt-2' 
                     type="button" 
                     onClick={handleDifficultyChange}>
                         Cambia difficoltà
@@ -274,24 +280,58 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                     disabled 
                     shadow 
                 />
-                <Button 
-                    className='bg-myGreen hover:!bg-myLightGreen mt-2' 
+                <Button
+                    color="primary"
+                    className='mt-2' 
                     type="button" 
                     onClick={handleHabitatChange}>
                         Cambia habitat
                 </Button>
             </div>
             <div>
-                <Label htmlFor="category" value="Categoria" />
-                <TextInput 
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange} 
-                    placeholder="Inserisci la categoria della pianta" 
-                    required 
-                    shadow 
-                />
+                <fieldset className="flex max-w-md gap-3">
+                    <legend className="mb-4">Scegli la categoria</legend>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="succulentiResistenti" 
+                            name="category" 
+                            value="succulentiResistenti" 
+                            checked={formData.category === 'succulentiResistenti'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="succulentiResistenti">Succulenti e Resistenti</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="speciali" 
+                            name="category" 
+                            value="speciali" 
+                            checked={formData.category === 'speciali'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="speciali">Speciali</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="utili" 
+                            name="category" 
+                            value="utili" 
+                            checked={formData.category === 'utili'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="utili">Utili</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="stagionaliPerenni" 
+                            name="category" 
+                            value="stagionaliPerenni" 
+                            checked={formData.category === 'stagionaliPerenni'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="stagionaliPerenni">Stagionali e Perenni</Label>
+                    </div>
+                </fieldset>
             </div>
             <div>
                 <Label htmlFor="inStock" value="In Stock" />
@@ -306,7 +346,7 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                     required 
                 />
             </div>
-            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">
+            <Button color="primary" type="submit">
                 {initialData ? 'Aggiorna' : 'Crea'}
             </Button>
         </form>

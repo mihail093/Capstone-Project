@@ -136,7 +136,8 @@ export default function Backoffice() {
                 <span className='font-dancingScript text-red-800'>La Sughera</span> Backoffice
             </h1>
             <Button 
-                className='m-2 bg-myGreen hover:!bg-myLightGreen' 
+                color="primary"
+                className='m-2' 
                 onClick={() => setPlantForm(!plantForm)}>
                     {plantForm ? 'Gestisci Prodotti' : 'Gestisci Piante'}
             </Button>

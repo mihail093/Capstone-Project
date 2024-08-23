@@ -41,7 +41,7 @@ export default function Register() {
               <Checkbox id="agree" />
               <Label htmlFor="agree" className="flex text-white">
                 Accetto&nbsp;
-                <Link to="#" className="text-white hover:underline dark:text-cyan-500">
+                <Link to="#" className="text-white hover:underline">
                   termini e condizioni
                 </Link>
               </Label>
@@ -51,7 +51,7 @@ export default function Register() {
               <Label htmlFor="age" className="text-white">Ho 18 anni o più</Label>
             </div>
           </div>
-          <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Registrati</Button>
+          <Button color="primary" type="submit">Registrati</Button>
         </form>
       </div>
     </div>

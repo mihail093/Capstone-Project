@@ -26,8 +26,8 @@ export default function PlantListComponent({ plants, onEdit, onDelete }) {
                         <Table.Cell>{plant.price}</Table.Cell>
                         <Table.Cell>{plant.habitat}</Table.Cell>
                         <Table.Cell>
-                            <Button size='xs' className='my-1 bg-myGreen hover:!bg-myLightGreen' onClick={() => onEdit(plant)}>Modifica</Button>
-                            <Button size='xs' className='my-1 bg-myGreen hover:!bg-myLightGreen' onClick={() => onDelete(plant._id)}>Elimina</Button>
+                            <Button size='xs' color="primary" className='my-1' onClick={() => onEdit(plant)}>Modifica</Button>
+                            <Button size='xs' color="primary" className='my-1' onClick={() => onDelete(plant._id)}>Elimina</Button>
                         </Table.Cell>
                     </Table.Row>
                 ))}

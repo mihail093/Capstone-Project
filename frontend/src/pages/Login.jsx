@@ -23,7 +23,7 @@ export default function Login() {
             <Label className='text-white' htmlFor="password2" value="Password" />
             <TextInput id="password2" type="password" placeholder="Inserisci la password" required shadow />
           </div>
-          <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">Accedi</Button>
+          <Button color="primary" type="submit">Accedi</Button>
         </form>
       </div>
     </div>

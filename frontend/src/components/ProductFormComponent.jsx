@@ -6,7 +6,7 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
         name: '',
         description: '',
         price: 0,
-        category: '',
+        category: 'altriProdotti',
         inStock: 0
     });
 
@@ -18,7 +18,6 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
                 name: initialData.name || '',
                 description: initialData.description || '',
                 price: initialData.price || 0,
-                category: initialData.category || '',
                 inStock: initialData.inStock || 0
             });
         }
@@ -66,7 +65,6 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
             name: '',
             description: '',
             price: 0,
-            category: '',
             inStock: 0
         });
         setImageFile(null);
@@ -92,7 +90,7 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
                     name="image"
                     type="file"
                     onChange={handleChange}
-                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                 />
                 {initialData && initialData.image && (
                     <img src={initialData.image} alt="Current product" className="mt-2 max-w-xs" />
@@ -129,9 +127,7 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
                     id="category"
                     name="category"
                     value={formData.category}
-                    onChange={handleChange}
-                    placeholder="Inserisci la categoria"
-                    required
+                    disabled
                 />
             </div>
             <div>
@@ -147,7 +143,7 @@ export default function ProductFormComponent({ onSubmit, initialData }) {
                     required
                 />
             </div>
-            <Button className='bg-myGreen hover:!bg-myLightGreen' type="submit">
+            <Button color="primary" type="submit">
                 {initialData ? 'Aggiorna' : 'Crea'}
             </Button>
         </form>

@@ -9,7 +9,7 @@ import fiori from '../assets/fiori.png';
 const cardData = [
   {
     title: "Piante da Interno",
-    imgAlt: "Piante da interno",
+    imgAlt: "Pianta da interno",
     imgSrc: fiori,
     items: [
       "Piante da appartamento",
@@ -19,32 +19,56 @@ const cardData = [
   },
   {
     title: "Piante da Esterno",
-    imgAlt: "Piante da esterno",
+    imgAlt: "Pianta da esterno",
     imgSrc: fiori,
     items: [
       "Piante da giardino",
       "Piante da balcone e terrazzo",
-      "Rampicanti"
+      "Rampicanti",
+      "Piante da siepe"
     ]
   },
   {
-    title: "Piante Grasse e Succulente",
-    imgAlt: "Piante grasse e succulente",
+    title: "Piante Succulenti e Resistenti",
+    imgAlt: "Pianta succulente",
     imgSrc: fiori,
     items: [
       "Cactus",
-      "Succulente da interno",
-      "Succulente da esterno"
+      "Succulente",
+      "Piante grasse",
+      "Piante xerofite (resistenti alla siccità)"
     ]
   },
   {
-    title: "Piante Fiorite",
-    imgAlt: "Piante fiorite",
+    title: "Piante Speciali",
+    imgAlt: "Bonsai",
     imgSrc: fiori,
     items: [
+      "Bonsai",
       "Orchidee",
-      "Piante annuali",
-      "Piante perenni"
+      "Tropicali",
+      "Piante acquatiche"
+    ]
+  },
+  {
+    title: "Piante Utili",
+    imgAlt: "pianta",
+    imgSrc: fiori,
+    items: [
+      "Aromatiche",
+      "Medicinali",
+      "Da frutto",
+      "Ortaggi"
+    ]
+  },
+  {
+    title: "Piante Stagionali e Perenni",
+    imgAlt: "pianta",
+    imgSrc: fiori,
+    items: [
+      "Annuali",
+      "Perenni",
+      "Bulbose"
     ]
   },
   {
@@ -88,8 +112,8 @@ export default function Home() {
         <div className='grid grid-cols-2 m-12 gap-2'>
           {cardData.map((card, index) => (
               <Card key={index} className="max-w-sm hover:border-2 hover:border-myGreen" imgAlt={card.imgAlt} imgSrc={card.imgSrc}>
-                <h5 className="text-2xl font-title tracking-tight text-gray-900 dark:text-white">{card.title}</h5>
-                <p className="text-gray-700 dark:text-gray-400">
+                <h5 className="text-2xl font-title tracking-tight text-gray-900">{card.title}</h5>
+                <p className="text-gray-700">
                   <ul>
                     {card.items.map((item, itemIndex) => (
                       <li key={itemIndex}>{item}</li>

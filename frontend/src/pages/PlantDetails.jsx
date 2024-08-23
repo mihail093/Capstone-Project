@@ -57,12 +57,13 @@ export default function PlantDetails() {
                         className='absolute bottom-2 right-2 text-black text-[18px] cursor-pointer hover:text-[22px]' 
                         onClick={() => setZoomImage(true)} />
                     </div>
-                    <p className="text-gray-700 dark:text-gray-400 text-center mb-4">
+                    <p className="text-gray-700 text-center mb-4">
                         {plant.description}
                     </p>
                     <p className="text-center">Habitat: {plant.habitat}</p>
-                    <h4 className="text-center text-gray-900 dark:text-white cursor-default">{plant.price} €</h4>
-                    <Button size='md' className='m-auto bg-myGreen hover:!bg-myLightGreen mt-2'>
+                    <p className="text-center">Categoria: {plant.category}</p>
+                    <h4 className="text-center text-gray-900 cursor-default">{plant.price} €</h4>
+                    <Button size='md' color="primary" className='m-auto mt-2'>
                     Aggiungi al carrello
                     </Button>
                 </Card>
@@ -86,7 +87,7 @@ export default function PlantDetails() {
                         <div>
                             <h4 className='text-xl sm:text-2xl font-title mb-3'>Temperatura</h4>
                             <div className='flex items-center justify-center mb-2'>
-                                <GiMedicalThermometer className='text-blue-400 text-[80px] mr-2'/>
+                                <GiMedicalThermometer className='text-blue-200 text-[80px] mr-2'/>
                                 <p className='font-sans text-lg'>{plant.careInstructions.temperature}</p>
                             </div>
                         </div>
@@ -94,7 +95,7 @@ export default function PlantDetails() {
                         <div>
                             <h4 className='text-xl sm:text-2xl font-title mb-3'>Acqua</h4>
                             <div className='flex items-center justify-center mb-2'>
-                                <FaTint className='text-blue-400 text-[80px] mr-2'/>
+                                <FaTint className='text-blue-500 text-[80px] mr-2'/>
                                 <p className='font-sans text-lg'>{plant.careInstructions.water}</p>
                             </div>
                         </div>
@@ -109,7 +110,7 @@ export default function PlantDetails() {
                     </div>
                     
                     <div className='mt-6'>
-                        <PlantCareIndicator />
+                        <PlantCareIndicator plant={plant} />
                     </div>
                 </div>
             </div>
