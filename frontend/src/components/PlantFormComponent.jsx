@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Label, TextInput, Textarea, Radio } from "flowbite-react";
 
-export default function PlantFormComponent({ habitat, setHabitat, difficulty, setDifficulty, difficultyFunction, onSubmit, initialData }) {
+export default function PlantFormComponent({ setHabitat, onSubmit, initialData }) {
     const [formData, setFormData] = useState({
         name: '',
         scientificName: '',
@@ -44,13 +44,24 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
+        
         if (type === 'file') {
             setImageFile(files[0]);
         } else if (type === 'radio') {
-            setFormData(prev => ({
-                ...prev,
-                category: value
-            }));
+            if (name === 'careInstructions.difficulty') {
+                setFormData(prev => ({
+                    ...prev,
+                    careInstructions: {
+                        ...prev.careInstructions,
+                        difficulty: value
+                    }
+                }));
+            } else {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
         } else if (name.startsWith('careInstructions.')) {
             const [, field] = name.split('.');
             setFormData(prev => ({
@@ -76,19 +87,6 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
             habitat: newHabitat
         }));
         setHabitat(newHabitat);
-    };
-
-    // Funzione per cambiare difficoltà nella cura della pianta
-    const handleDifficultyChange = () => {
-        const newDifficulty = difficultyFunction(formData.careInstructions.difficulty);
-        setFormData(prev => ({
-            ...prev,
-            careInstructions: {
-                ...prev.careInstructions,
-                difficulty: newDifficulty
-            }
-        }));
-        setDifficulty(newDifficulty); // Questa funzione viene passata come prop dal componente genitore
     };
 
     const handleSubmit = (e) => {
@@ -253,22 +251,59 @@ export default function PlantFormComponent({ habitat, setHabitat, difficulty, se
                 />
             </div>
             <div>
-                <Label htmlFor="careInstructions.difficulty" value="Difficoltà nella cura" />
-                <TextInput 
-                    id="careInstructions.difficulty" 
-                    name="careInstructions.difficulty"
-                    value={formData.careInstructions.difficulty}
-                    onChange={handleChange}
-                    disabled
-                    shadow 
-                />
-                <Button 
-                    color="primary"
-                    className='mt-2' 
-                    type="button" 
-                    onClick={handleDifficultyChange}>
-                        Cambia difficoltà
-                </Button>
+                <fieldset className="flex max-w-md gap-3">
+                    <legend className="mb-4">Scegli la difficoltà nella cura della pianta</legend>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="difficulty-easiest" 
+                            name="careInstructions.difficulty" 
+                            value="easiest" 
+                            checked={formData.careInstructions.difficulty === 'easiest'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="difficulty-easiest">Facilissimo</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="difficulty-easy" 
+                            name="careInstructions.difficulty" 
+                            value="easy" 
+                            checked={formData.careInstructions.difficulty === 'easy'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="difficulty-easy">Facile</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="difficulty-medium" 
+                            name="careInstructions.difficulty" 
+                            value="medium" 
+                            checked={formData.careInstructions.difficulty === 'medium'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="difficulty-medium">Medio</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="difficulty-difficult" 
+                            name="careInstructions.difficulty" 
+                            value="difficult" 
+                            checked={formData.careInstructions.difficulty === 'difficult'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="difficulty-difficult">Difficile</Label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Radio 
+                            id="difficulty-hardest" 
+                            name="careInstructions.difficulty" 
+                            value="hardest" 
+                            checked={formData.careInstructions.difficulty === 'hardest'}
+                            onChange={handleChange}
+                        />
+                        <Label htmlFor="difficulty-hardest">Impegnativo</Label>
+                    </div>
+                </fieldset>
             </div>
             <div>
                 <Label htmlFor="habitat" value="Habitat" />

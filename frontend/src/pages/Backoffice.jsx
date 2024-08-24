@@ -1,34 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'flowbite-react';
+import { PiArrowFatLinesDownFill, PiArrowFatLinesUpFill } from "react-icons/pi";
 import PlantFormComponent from '../components/PlantFormComponent';
 import ProductFormComponent from '../components/ProductFormComponent';
 import PlantListComponent from '../components/PlantListComponent';
 import ProductListComponent from '../components/ProductListComponent';
 import { productApi, plantApi } from '../services/api';
+import { useScrollNavigation } from '../utils/useScrollNavigation';
 
 export default function Backoffice() {
     // useState per gestire l'input "habitat"
     const [habitat, setHabitat] = useState('indoor');
-
-    // useState per gestire la difficoltà nella cura della pianta
-    const [difficulty, setDifficulty] = useState('medium');
-
-    const difficultyFunction = (difficulty) => {
-        switch (difficulty) {
-            case 'medium':
-                return 'difficult';
-            case 'difficult':
-                return 'hardest';
-            case 'hardest':
-                return 'easiest';
-            case 'easiest':
-                return 'easy';
-            case 'easy':
-                return 'medium';
-            default:
-                return difficulty; 
-        }
-    }
 
     // useState per cambiare form e lista (form e lista PIANTE/ form e lista PRODOTTI)
     const [plantForm, setPlantForm] = useState(true);
@@ -40,6 +22,9 @@ export default function Backoffice() {
     // useState per le PIANTE
     const [plants, setPlants] = useState([]);
     const [editingPlant, setEditingPlant] = useState(null);
+
+    // Funzione importata da utils/useScrollNavigation per gestire lo scorrimento rapito della pagina
+    const { topRef, bottomRef, scrollToBottom, scrollToTop } = useScrollNavigation();
 
     useEffect(() => {
         fetchProducts();
@@ -143,32 +128,57 @@ export default function Backoffice() {
             </Button>
             {plantForm ? (
                 <>
-                    <PlantListComponent
-                        plants={plants}
-                        onEdit={setEditingPlant}
-                        onDelete={handlePlantDelete}
-                    />
-                    <PlantFormComponent 
-                        habitat={habitat} 
-                        setHabitat={setHabitat}
-                        difficulty={difficulty}
-                        setDifficulty={setDifficulty}
-                        difficultyFunction={difficultyFunction} 
-                        onSubmit={handlePlantSubmit} 
-                        initialData={editingPlant}
-                    />
+                    <div ref={topRef} className="flex items-start space-x-4">
+                        <div className="flex-grow overflow-x-auto">
+                            <PlantListComponent
+                                plants={plants}
+                                onEdit={setEditingPlant}
+                                onDelete={handlePlantDelete}
+                            />
+                        </div>
+                        <Button color="primary" onClick={scrollToBottom} className="mt-4">
+                            <PiArrowFatLinesDownFill className="h-5 w-5" />
+                        </Button>
+                    </div>
+                    <div ref={bottomRef} className="flex items-end space-x-4">
+                        <div className="flex-grow overflow-x-auto">
+                            <PlantFormComponent
+                                habitat={habitat} 
+                                setHabitat={setHabitat}
+                                onSubmit={handlePlantSubmit} 
+                                initialData={editingPlant}
+                            />
+                        </div>
+                        <Button color="primary" onClick={scrollToTop} className="mt-4">
+                            <PiArrowFatLinesUpFill className="h-5 w-5" />
+                        </Button>
+                    </div>
                 </>
             ) : (
                 <>
-                    <ProductListComponent 
-                        products={products}
-                        onEdit={setEditingProduct}
-                        onDelete={handleProductDelete}
-                    />
-                    <ProductFormComponent 
-                        onSubmit={handleProductSubmit}
-                        initialData={editingProduct}
-                    />
+                    <div ref={topRef} className="flex items-start space-x-4">
+                        <div className="flex-grow overflow-x-auto">
+                            <ProductListComponent 
+                                products={products}
+                                onEdit={setEditingProduct}
+                                onDelete={handleProductDelete}
+                            />
+                        </div>
+                        <Button color="primary" onClick={scrollToBottom} className="mt-4">
+                            <PiArrowFatLinesDownFill className="h-5 w-5" />
+                        </Button>
+                    </div>
+                    <div ref={bottomRef} className="flex items-end space-x-4">
+                        <div className="flex-grow overflow-x-auto">
+                            <ProductFormComponent 
+                                onSubmit={handleProductSubmit}
+                                initialData={editingProduct}
+                            />
+                        </div>
+                        <Button color="primary" onClick={scrollToTop} className="mt-4">
+                            <PiArrowFatLinesUpFill className="h-5 w-5" />
+                        </Button>
+                    </div>
                 </>
             )}
         </div>
