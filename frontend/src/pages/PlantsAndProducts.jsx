@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, TextInput, Dropdown } from 'flowbite-react';
+import { Button, Card, Dropdown } from 'flowbite-react';
+import SearchBar from '../components/SearchBar';
 import { productApi, plantApi } from '../services/api';
 
-export default function PlantsAndProducts() {
+export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHome, setCartItems }) {
     // useState per le PIANTE
     const [plants, setPlants] = useState([]);
 
     // useState per i PRODOTTI
     const [products, setProducts] = useState([]);
+
+    // useState per la barra di ricerca
+    const [searchTerm, setSearchTerm] = useState('');
 
     // useState per selezionare la categoria
     const [categories, setCategories] = useState({
@@ -26,6 +30,21 @@ export default function PlantsAndProducts() {
         fetchProducts();
         fetchPlants();
     }, []);
+
+    useEffect(() => {
+        if (categoryFromHome !== '') {
+            setCategories(prevCategories => {
+                const newCategories = Object.keys(prevCategories).reduce((acc, key) => {
+                    acc[key] = false;
+                    return acc;
+                }, {});
+                newCategories[categoryFromHome] = true;
+                return newCategories;
+            });
+            setCategoryFromHome('');
+        }
+    }, [categoryFromHome, setCategoryFromHome]);
+
 
     // GET delle PIANTE
     const fetchPlants = async () => {
@@ -59,12 +78,44 @@ export default function PlantsAndProducts() {
         });
     };
 
+    // Funzione per la barra di ricerca
+    const handleSearchChange = (value) => {
+        setSearchTerm(value.toLowerCase());
+    };
+
+    // Barra di ricerca (filtro i risultati)
+    const filteredPlants = plants.filter(plant => 
+        plant.name.toLowerCase().includes(searchTerm) &&
+        (categories.all || categories[plant.habitat] || categories[plant.category])
+    );
+
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm) &&
+        (categories.all || categories[product.category])
+    );
+
+    // Funzione per la gestione del carrello
+    const manageCart = (item) => {
+        setCartItems(prevItems => {
+            const existingItemIndex = prevItems.findIndex(i => i.name === item.name);
+            if (existingItemIndex > -1) {
+                // Crea una copia profonda dell'array
+                return prevItems.map((cartItem, index) => {
+                    if (index === existingItemIndex) {
+                        return { ...cartItem, quantity: cartItem.quantity + 1 };
+                    }
+                    return cartItem;
+                });
+            } else {
+                return [...prevItems, { name: item.name, price: item.price, quantity: 1 }];
+            }
+        });
+    };
+
     return (
         <div className='max-w-4xl mx-auto py-16 text-center'>
             <div>
-                <TextInput
-                    placeholder="Cerca la pianta o il prodotto"
-                />
+                <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} placeholder="Cerca la pianta o il prodotto" />
                 <Dropdown label="Scegli categoria">
                     <Dropdown.Item onClick={() => handleCategoryClick('indoor')}>Piante da Interno</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleCategoryClick('outdoor')}>Piante da Esterno</Dropdown.Item>
@@ -80,34 +131,31 @@ export default function PlantsAndProducts() {
                 <span className='font-dancingScript text-red-800'>La Sughera</span> Backoffice
             </h1>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-                {plants.map((plant) => (
-                    (categories.all || (categories[plant.habitat] || categories[plant.category])) && (
-                        <Card key={plant._id} className="h-full">
-                            <Link to={`/plant/details/${plant._id}`} target="_blank" rel="noopener noreferrer" className="h-48 w-full overflow-hidden">
-                                <img 
-                                src={plant.image} 
-                                alt={plant.name}
-                                className="w-full h-full object-contain"
-                                />
-                            </Link>
-                            <div className='p-4'>
-                                <Link to={`/plant/details/${plant._id}`} target="_blank" rel="noopener noreferrer">
+                {filteredPlants.map((plant) => (
+                    <Card key={plant._id} className="h-full">
+                        <Link to={`/plant/details/${plant._id}`} className="h-48 w-full overflow-hidden">
+                            <img 
+                            src={plant.image} 
+                            alt={plant.name}
+                            className="w-full h-full object-contain"
+                            />
+                        </Link>
+                        <div className='p-4'>
+                            <Link to={`/plant/details/${plant._id}`}>
                                 <h3 className="text-xl font-semibold hover:text-[1.3rem] hover:text-black tracking-tight text-gray-600">
                                     {plant.name}
                                 </h3>
-                                </Link>
-                                <h4 className="text-black font-bold cursor-default">{plant.price} €</h4>
-                                <Button size='md' color="primary" className='m-auto mt-2'>
+                            </Link>
+                            <h4 className="text-black font-bold cursor-default">{plant.price} €</h4>
+                            <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(plant)}>
                                 Aggiungi al carrello
-                                </Button>
-                            </div>
-                        </Card>
-                    )
+                            </Button>
+                        </div>
+                    </Card>
                 ))}
-                {products.map((product) => (
-                    (categories.all || categories[product.category]) && (
-                        <Card key={product._id} className="h-full">
-                        <Link to={`/product/details/${product._id}`} target="_blank" rel="noopener noreferrer" className="h-48 w-full overflow-hidden">
+                {filteredProducts.map((product) => (
+                    <Card key={product._id} className="h-full">
+                        <Link to={`/product/details/${product._id}`} className="h-48 w-full overflow-hidden">
                             <img 
                             src={product.image} 
                             alt={product.name}
@@ -115,18 +163,17 @@ export default function PlantsAndProducts() {
                             />
                         </Link>
                         <div className='p-4'>
-                            <Link to={`/product/details/${product._id}`} target="_blank" rel="noopener noreferrer">
-                            <h3 className="text-xl font-semibold hover:text-[1.3rem] hover:text-black tracking-tight text-gray-600">
-                                {product.name}
-                            </h3>
+                            <Link to={`/product/details/${product._id}`}>
+                                <h3 className="text-xl font-semibold hover:text-[1.3rem] hover:text-black tracking-tight text-gray-600">
+                                    {product.name}
+                                </h3>
                             </Link>
                             <h4 className="text-black font-bold cursor-default">{product.price} €</h4>
-                            <Button size='md' color="primary" className='m-auto mt-2'>
-                            Aggiungi al carrello
+                            <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>
+                                Aggiungi al carrello
                             </Button>
                         </div>
-                        </Card>
-                    )
+                    </Card>
                 ))}
             </div>
         </div>

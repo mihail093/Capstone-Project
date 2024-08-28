@@ -3,7 +3,7 @@ import { Card, Alert, Button } from "flowbite-react";
 import { useParams } from 'react-router-dom';
 import { productApi } from '../services/api';
 
-export default function ProductDetails() {
+export default function ProductDetails({ setCartItems }) {
     // useState per salvarci i dati relativi al prodotto
     const [product, setProduct] = useState(null);
     // useParams per recuperare l'id del prodotto
@@ -30,6 +30,24 @@ export default function ProductDetails() {
                 </Alert>;
     }
 
+    // Funzione per la gestione del carrello
+    const manageCart = (item) => {
+        setCartItems(prevItems => {
+            const existingItemIndex = prevItems.findIndex(i => i.name === item.name);
+            if (existingItemIndex > -1) {
+                // Crea una copia profonda dell'array
+                return prevItems.map((cartItem, index) => {
+                    if (index === existingItemIndex) {
+                        return { ...cartItem, quantity: cartItem.quantity + 1 };
+                    }
+                    return cartItem;
+                });
+            } else {
+                return [...prevItems, { name: item.name, price: item.price, quantity: 1 }];
+            }
+        });
+    };
+
     return (
         <div className='max-w-4xl mx-auto py-16 text-center'>
             <h1 className='text-4xl sm:text-5xl font-title mb-6'>
@@ -50,7 +68,7 @@ export default function ProductDetails() {
                     </p>
                     <p>Categoria: {product.category}</p>
                     <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
-                    <Button size='md' color="primary" className='m-auto mt-2'>
+                    <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>
                     Aggiungi al carrello
                     </Button>
                 </Card>

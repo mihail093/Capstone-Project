@@ -14,7 +14,7 @@ const customTheme = {
     field: {
       input: {
         colors: {
-          gray: "border-gray-500 bg-blue-50 text-gray-900 focus:border-green-800 focus:ring-green-800"
+          gray: "border-gray-500 bg-blue-100 text-gray-900 focus:border-green-800 focus:ring-green-800"
         }
       }
     }
@@ -26,7 +26,9 @@ const customTheme = {
   },
   button: {
     color: {
-      primary: "bg-myGreen text-myBeige hover:!bg-myLightGreen"
+      primary: "bg-myGreen text-myBeige hover:!bg-myLightGreen",
+      failure: "bg-myRed text-myBeige hover:!bg-myLightRed",
+      light: "bg-myRed text-myBeige hover:bg-myLightRed border-2 border-red-600 shadow-xl shadow-red-600/40 hover:border-red-900 hover:shadow-lg hover:shadow-red-900/20 transition-all duration-200"
     }
   },
   checkbox: {

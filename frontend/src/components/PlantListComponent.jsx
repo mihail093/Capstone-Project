@@ -15,13 +15,7 @@ export default function PlantListComponent({ plants, onEdit, onDelete }) {
             {plants.map((plant) => (
                 <Table.Row key={plant._id}>
                     <Table.Cell>
-                        <Link 
-                            to={`/plant/details/${plant._id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            {plant.name}
-                        </Link>
+                        <Link to={`/plant/details/${plant._id}`}>{plant.name}</Link>
                     </Table.Cell>
                     <Table.Cell>{plant.price}</Table.Cell>
                     <Table.Cell>{plant.habitat}</Table.Cell>

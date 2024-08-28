@@ -17,8 +17,11 @@ export default {
       },
       colors: {
         'myBeige': '#F0E4D4',
+        'myLightBeige': '#FCF7F0',
         'myGreen': '#15372C',
         'myLightGreen': '#1E4F3F',
+        'myRed': '#FE2F2F',
+        'myLightRed': '#FF4E4E'
       }
     },
   },

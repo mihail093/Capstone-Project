@@ -15,13 +15,7 @@ export default function ProductListComponent({ products, onEdit, onDelete }) {
                 {products.map((product) => (
                     <Table.Row key={product._id}>
                         <Table.Cell>
-                            <Link 
-                                to={`/product/details/${product._id}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {product.name}
-                            </Link>
+                            <Link to={`/product/details/${product._id}`}>{product.name}</Link>
                         </Table.Cell>
                         <Table.Cell>{product.price}</Table.Cell>
                         <Table.Cell>{product.category}</Table.Cell>

@@ -1,9 +1,19 @@
-import React from 'react';
-import { Avatar, Dropdown, Navbar } from 'flowbite-react';
+import React, { useState, useMemo } from 'react';
+import { Avatar, Dropdown, Navbar, Button, Badge } from 'flowbite-react';
 import logo from '../assets/LOGO.jpg';
 import { Link } from 'react-router-dom';
+import CartModalComponent from './CartModalComponent';
+import { PiShoppingCartSimpleFill } from "react-icons/pi";
 
-export default function NavComponent() {
+export default function NavComponent({ cartItems, setCartItems }) {
+    // useState per gestire apertura/chiusura del Modal carrello
+    const [isCartOpen, setIsCartOpen] = useState(false);
+
+    // Calcola il numero totale di prodotti nel carrello
+    const totalItems = useMemo(() => {
+        return cartItems.reduce((total, item) => total + item.quantity, 0);
+    }, [cartItems]);
+
     return (
         <Navbar fluid className='bg-myGreen py-4'>
             <div className="flex items-center">
@@ -18,7 +28,11 @@ export default function NavComponent() {
                     La Sughera
                 </h1>
             </div>
-            <div className='flex md:order-2'>
+            <div className='flex md:order-2 items-center'>
+                <Button color="primary" onClick={() => setIsCartOpen(true)} className="mr-2">
+                    <PiShoppingCartSimpleFill className='w-5 h-5 text-myBeige' />
+                    <Badge color="failure" className="ml-2 bg-myBeige">{totalItems}</Badge>
+                </Button>
                 <Dropdown
                     arrowIcon={false}
                     inline
@@ -45,6 +59,12 @@ export default function NavComponent() {
                 <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Contatti</Link>
                 <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
             </Navbar.Collapse>
+            <CartModalComponent 
+                isOpen={isCartOpen} 
+                onClose={() => setIsCartOpen(false)}
+                cartItems={cartItems}
+                setCartItems={setCartItems}
+            />
         </Navbar>
     )
 }
