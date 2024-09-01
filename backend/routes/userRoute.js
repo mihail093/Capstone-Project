@@ -2,6 +2,7 @@ import express from 'express';
 import User from '../models/User.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { isAdmin } from '../middlewares/adminMiddleware.js';
+import cloudinaryUploader from '../config/cloudinaryConfig.js';
 
 const router = express.Router();
 
@@ -29,12 +30,24 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // PUT aggiorna un utente (senza modifica del ruolo)
-router.put('/:id', authMiddleware, async (req, res) => {
+router.patch('/:id', authMiddleware, cloudinaryUploader.single('avatar'), async (req, res) => {
   try {
     const { username, email, firstName, lastName } = req.body;
+    
+    const updateData = {
+      username,
+      email,
+      firstName,
+      lastName
+    };
+
+    if (req.file) {
+      updateData.avatar = req.file.path;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { username, email, firstName, lastName },
+      updateData,
       { new: true, runValidators: true }
     ).select('-password');
 
