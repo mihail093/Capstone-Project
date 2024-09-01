@@ -1,18 +1,30 @@
 import React, { useState, useMemo } from 'react';
 import { Avatar, Dropdown, Navbar, Button, Badge } from 'flowbite-react';
 import logo from '../assets/LOGO.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CartModalComponent from './CartModalComponent';
 import { PiShoppingCartSimpleFill } from "react-icons/pi";
+import { useAuth } from '../utils/AuthContext';
 
 export default function NavComponent({ cartItems, setCartItems }) {
     // useState per gestire apertura/chiusura del Modal carrello
     const [isCartOpen, setIsCartOpen] = useState(false);
 
+    // Estraggo 'user' e 'logout' dal contesto di autenticazione
+    const { user, logout } = useAuth();
+
+    // useNavigate per reindirizzare l'utente alla pagina Home
+    const navigate = useNavigate();
+
     // Calcola il numero totale di prodotti nel carrello
     const totalItems = useMemo(() => {
         return cartItems.reduce((total, item) => total + item.quantity, 0);
     }, [cartItems]);
+
+    const logoutFunction = () => {
+        navigate('/');
+        logout();
+    }
 
     return (
         <Navbar fluid className='bg-myGreen py-4'>
@@ -33,23 +45,43 @@ export default function NavComponent({ cartItems, setCartItems }) {
                     <PiShoppingCartSimpleFill className='w-5 h-5 text-myBeige' />
                     <Badge color="failure" className="ml-2 bg-myBeige">{totalItems}</Badge>
                 </Button>
-                <Dropdown
-                    arrowIcon={false}
-                    inline
-                    label={
-                    <Avatar className='me-2' alt='User settings' rounded />
-                    }
-                >
-                    <Dropdown.Header className='text-sm cursor-default'>
-                        <span className='block'>Bonnie Green</span>
-                        <span className='block truncate font-medium'>name@flowbite.com</span>
-                    </Dropdown.Header>
-                    <Dropdown.Item as={Link} to="/dashboard">Dashboard</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item as={Link} to="/login">Accedi</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/register">Registrati</Dropdown.Item>
-                </Dropdown>
+                {user ? (
+                    <Dropdown
+                        arrowIcon={false}
+                        inline
+                        label={
+                            <Avatar 
+                                img={user.avatar}
+                                alt={`${user.username}'s avatar`}
+                                rounded
+                                className='me-2'
+                            />
+                        }
+                    >
+                        <Dropdown.Header className='text-sm cursor-default'>
+                            <span className='block truncate font-medium'>{user.email}</span>
+                        </Dropdown.Header>
+                        <Dropdown.Item as={Link} to="/user/dashboard">Dashboard</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/user/settings">Settings</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={logoutFunction}>Logout</Dropdown.Item>
+                    </Dropdown>
+                ) : (
+                    <Dropdown
+                        arrowIcon={false}
+                        inline
+                        label={
+                            <Avatar 
+                                alt='Default avatar'
+                                rounded
+                                className='me-2'
+                            />
+                        }
+                    >
+                        <Dropdown.Item as={Link} to="/login">Accedi</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/register">Registrati</Dropdown.Item>
+                    </Dropdown>
+                )}
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
@@ -66,5 +98,5 @@ export default function NavComponent({ cartItems, setCartItems }) {
                 setCartItems={setCartItems}
             />
         </Navbar>
-    )
+    );
 }

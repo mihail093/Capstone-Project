@@ -63,7 +63,9 @@ export const productApi = {
 export const userApi = {
   getAll: () => api.get('/users'),
   getById: (id) => api.get(`/users/${id}`),
-  update: (id, userData) => api.put(`/users/${id}`, userData),
+  update: (id, userData) => api.patch(`/users/${id}`, userData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   updateRole: (id, role) => api.patch(`/users/${id}/role`, { role }),
   delete: (id) => api.delete(`/users/${id}`),
 };
