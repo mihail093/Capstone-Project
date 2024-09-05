@@ -42,6 +42,8 @@ export const plantApi = {
   getByHabitat: (habitat) => api.get(`/plants/habitat/${habitat}`),
   addComment: (id, comment) => api.post(`/plants/${id}/comments`, comment),
   getComments: (id) => api.get(`/plants/${id}/comments`),
+  addComment: (plantId, commentData) => api.post(`/plants/${plantId}/comments`, commentData),
+  getComments: (plantId) => api.get(`/plants/${plantId}/comments`),
 };
 
 // API per i prodotti
@@ -57,6 +59,8 @@ export const productApi = {
   delete: (id) => api.delete(`/products/${id}`),
   getByCategory: (category) => api.get(`/products/category/${category}`),
   search: (query) => api.get(`/products/search/${query}`),
+  addComment: (productId, commentData) => api.post(`/products/${productId}/comments`, commentData),
+  getComments: (productId) => api.get(`/products/${productId}/comments`),
 };
 
 // API per gli utenti

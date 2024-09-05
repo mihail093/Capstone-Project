@@ -89,7 +89,9 @@ export default function NavComponent({ cartItems, setCartItems }) {
                 <Link to='/about' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Chi Siamo</Link>
                 <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Piante&Prodotti</Link>
                 <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Contatti</Link>
-                <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
+                {user && user.role === 'admin' && (
+                    <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
+                )}
             </Navbar.Collapse>
             <CartModalComponent 
                 isOpen={isCartOpen} 

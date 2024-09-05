@@ -47,9 +47,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authApi.register(userData);
       localStorage.setItem('token', response.data.token);
-      const userResponse = await authApi.getMe();
-      setUser(userResponse.data);
-      return userResponse.data;
     } catch (error) {
       console.error('Registration error:', error);
       throw error;

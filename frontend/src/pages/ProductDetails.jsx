@@ -2,12 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Card, Alert, Button } from "flowbite-react";
 import { useParams } from 'react-router-dom';
 import { productApi } from '../services/api';
+import ProductCommentAreaComponent from '../components/ProductCommentAreaComponent';
+import { BsBagHeartFill } from "react-icons/bs";
 
-export default function ProductDetails({ setCartItems }) {
+export default function ProductDetails({ setCartItems, setFavorites }) {
     // useState per salvarci i dati relativi al prodotto
     const [product, setProduct] = useState(null);
     // useParams per recuperare l'id del prodotto
     const { id } = useParams();
+
+    // Funzione per aggiungere un nuovo preferito
+    const addFavorite = (product) => {
+        setFavorites(prevFavorites => {
+            // Controlla se il prodotto è già nei preferiti
+            const isAlreadyFavorite = prevFavorites.some(fav => fav.id === product._id);
+            if (isAlreadyFavorite) {
+                // Se è già nei preferiti, non fare nulla
+                return prevFavorites;
+            }
+            // Altrimenti, aggiungi il nuovo preferito
+            return [...prevFavorites, { name: product.name, id: product._id }];
+        });
+    };
 
     // useEffect mostra i dettagli del prodotto al montaggio e ogni volta che cambia l'id
     useEffect(() => {
@@ -67,12 +83,19 @@ export default function ProductDetails({ setCartItems }) {
                         {product.description}
                     </p>
                     <p>Categoria: {product.category}</p>
-                    <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
+                    <div className="flex justify-center items-center gap-4">
+                        <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
+                        <BsBagHeartFill 
+                            className='text-2xl text-myLightRed hover:text-red-600'
+                            onClick={() => addFavorite(product)}
+                        />
+                    </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>
                     Aggiungi al carrello
                     </Button>
                 </Card>
             </div>
+            <div className="text-left"><ProductCommentAreaComponent productId={id} /></div>
         </div>
     );
 }

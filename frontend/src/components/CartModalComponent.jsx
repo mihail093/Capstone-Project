@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'flowbite-react';
 import { HiOutlineTrash, HiMinus, HiPlus } from "react-icons/hi";
+import { useAuth } from '../utils/AuthContext';
 
 export default function CartModalComponent({ isOpen, onClose, cartItems, setCartItems }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [shippingCosts, setShippingCosts] = useState(0);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     calculateTotalPrice();
@@ -39,6 +42,16 @@ export default function CartModalComponent({ isOpen, onClose, cartItems, setCart
     setTotalPrice(total);
   };
 
+  const proceedWithPurchase = () => {
+    if (subtotal === 0) {
+      alert('Il carrello è vuoto!')
+    } else {
+      onClose();
+      setCartItems([]);
+      alert('ACQUISTO AVVENUTO CON SUCCESSO');
+    }
+  }
+
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header className='bg-myGreen font-dancingScript'>
@@ -68,7 +81,11 @@ export default function CartModalComponent({ isOpen, onClose, cartItems, setCart
         </div>
       </Modal.Body>
       <Modal.Footer className='bg-myLightBeige border-t-0'>
-        <Button color="primary">Procedi all'acquisto</Button>
+        {user ? (
+          <Button color="primary" onClick={() => proceedWithPurchase()}>Procedi all'acquisto</Button>
+        ) : (
+          <Button color="primary" disabled>Per procedere all'acquisto Accedi/Registrati</Button>
+        )}
         <Button color="failure" onClick={() => setCartItems([])}>Svuota Carrello</Button>
         <Button color="failure" onClick={onClose}>Chiudi</Button>
       </Modal.Footer>

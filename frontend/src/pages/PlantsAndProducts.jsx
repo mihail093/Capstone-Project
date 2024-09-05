@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Dropdown } from 'flowbite-react';
+import { BsBagHeartFill } from "react-icons/bs";
 import SearchBar from '../components/SearchBar';
 import { productApi, plantApi } from '../services/api';
 
-export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHome, setCartItems }) {
+export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHome, setCartItems, setFavorites }) {
     // useState per le PIANTE
     const [plants, setPlants] = useState([]);
 
@@ -24,7 +25,21 @@ export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHom
         stagionaliPerenni: false,
         altriProdotti: false,
         all: true
-    })
+    });
+
+    // Funzione per aggiungere un nuovo preferito
+    const addFavorite = (item) => {
+        setFavorites(prevFavorites => {
+            // Controlla se il prodotto è già nei preferiti
+            const isAlreadyFavorite = prevFavorites.some(fav => fav.id === item._id);
+            if (isAlreadyFavorite) {
+                // Se è già nei preferiti, non fare nulla
+                return prevFavorites;
+            }
+            // Altrimenti, aggiungi il nuovo preferito
+            return [...prevFavorites, { name: item.name, id: item._id }];
+        });
+    };
 
     useEffect(() => {
         fetchProducts();
@@ -146,7 +161,13 @@ export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHom
                                     {plant.name}
                                 </h3>
                             </Link>
-                            <h4 className="text-black font-bold cursor-default">{plant.price} €</h4>
+                            <div className="flex justify-center items-center gap-4">
+                                <h4 className="text-black font-bold cursor-default">{plant.price} €</h4>
+                                <BsBagHeartFill 
+                                    className='text-2xl text-myLightRed hover:text-red-600'
+                                    onClick={() => addFavorite(plant)}
+                                />
+                            </div>
                             <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(plant)}>
                                 Aggiungi al carrello
                             </Button>
@@ -168,7 +189,13 @@ export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHom
                                     {product.name}
                                 </h3>
                             </Link>
-                            <h4 className="text-black font-bold cursor-default">{product.price} €</h4>
+                            <div className="flex justify-center items-center gap-4">
+                                <h4 className="text-black font-bold cursor-default">{product.price} €</h4>
+                                <BsBagHeartFill 
+                                    className='text-2xl text-myLightRed hover:text-red-600'
+                                    onClick={() => addFavorite(product)}
+                                />
+                            </div>
                             <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>
                                 Aggiungi al carrello
                             </Button>

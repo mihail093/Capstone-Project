@@ -5,12 +5,6 @@ import { Table, Button } from 'flowbite-react';
 export default function ProductListComponent({ products, onEdit, onDelete }) {
     return (
         <Table>
-            <Table.Head>
-                <Table.HeadCell>Nome</Table.HeadCell>
-                <Table.HeadCell>Prezzo</Table.HeadCell>
-                <Table.HeadCell>Categoria</Table.HeadCell>
-                <Table.HeadCell>Azioni</Table.HeadCell>
-            </Table.Head>
             <Table.Body className="divide-y">
                 {products.map((product) => (
                     <Table.Row key={product._id}>

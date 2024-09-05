@@ -55,7 +55,7 @@ export default function UserSettingsComponent() {
             <div className="p-8 ml-[24px]">
                 <h1 className='text-2xl sm:text-4xl font-dancingScript text-white'>Benvenuto</h1>
                 <p className='text-2xl sm:text-4xl text-white'>{user.username}</p>
-                <p className='text-md font-bold sm:text-lg text-white mt-8'>Puoi aggiungere il tuo nome completo e un'immagine di profilo</p>
+                <p className='text-md font-bold sm:text-lg text-white mt-16'>Puoi aggiungere il tuo nome completo e un'immagine di profilo</p>
                 <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col justify-center items-center gap-4">
                     <div>
                         <Label className='text-white' htmlFor="firstName" value="Il tuo Nome" />
@@ -93,7 +93,7 @@ export default function UserSettingsComponent() {
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
                     {success && <p className="text-green-500">{success}</p>}
-                    <Button type="submit" disabled={isLoading}>
+                    <Button color='primary' type="submit" disabled={isLoading}>
                         {isLoading ? 'Aggiornamento...' : 'Aggiorna Profilo'}
                     </Button>
                 </form>

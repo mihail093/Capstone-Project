@@ -1,5 +1,6 @@
 import express from 'express';
 import Plant from '../models/Plant.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 import cloudinaryUploader from '../config/cloudinaryConfig.js';
 
 const router = express.Router();
@@ -145,13 +146,18 @@ router.get('/category/:category', async (req, res) => {
 });
 
 // POST aggiungi un commento a una pianta
-router.post('/:id/comments', async (req, res) => {
+router.post('/:id/comments', authMiddleware, async (req, res) => {
   try {
     const plant = await Plant.findById(req.params.id);
     if (!plant) {
       return res.status(404).json({ message: 'Pianta non trovata' });
     }
-    plant.comments.push(req.body);
+    const newComment = {
+      text: req.body.text,
+      rating: req.body.rating,
+      user: req.user._id  // Associa l'ID dell'utente autenticato al commento
+    };
+    plant.comments.push(newComment);
     await plant.save();
     res.status(201).json(plant);
   } catch (error) {
@@ -162,7 +168,7 @@ router.post('/:id/comments', async (req, res) => {
 // GET tutti i commenti di una pianta
 router.get('/:id/comments', async (req, res) => {
   try {
-    const plant = await Plant.findById(req.params.id);
+    const plant = await Plant.findById(req.params.id).populate('comments.user', 'username');
     if (!plant) {
       return res.status(404).json({ message: 'Pianta non trovata' });
     }

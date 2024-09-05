@@ -6,13 +6,29 @@ import { plantApi } from '../services/api';
 import { FaTint, FaSeedling, FaSun } from 'react-icons/fa';
 import { GiMedicalThermometer } from "react-icons/gi";
 import { MdOutlineZoomOutMap, MdZoomInMap } from "react-icons/md";
+import { BsBagHeartFill } from "react-icons/bs";
 
 import PlantCareIndicator from '../components/PlantCareIndicator';
+import PlantCommentAreaComponent from '../components/PlantCommentAreaComponent';
 import backgroundImageAvif from '../assets/photo-1540927550647-43699cb14916.avif';
 
-export default function PlantDetails({ setCartItems }) {
+export default function PlantDetails({ setCartItems, setFavorites }) {
     const [plant, setPlant] = useState(null);
     const { id } = useParams();
+
+    // Funzione per aggiungere un nuovo preferito
+    const addFavorite = (plant) => {
+        setFavorites(prevFavorites => {
+            // Controlla se il prodotto è già nei preferiti
+            const isAlreadyFavorite = prevFavorites.some(fav => fav.id === plant._id);
+            if (isAlreadyFavorite) {
+                // Se è già nei preferiti, non fare nulla
+                return prevFavorites;
+            }
+            // Altrimenti, aggiungi il nuovo preferito
+            return [...prevFavorites, { name: plant.name, id: plant._id }];
+        });
+    };
 
     //useState per ingrandire l'immagine
     const [zoomImage, setZoomImage] = useState(false);
@@ -80,7 +96,13 @@ export default function PlantDetails({ setCartItems }) {
                     </p>
                     <p className="text-center">Habitat: {plant.habitat}</p>
                     <p className="text-center">Categoria: {plant.category}</p>
-                    <h4 className="text-center text-gray-900 cursor-default">{plant.price} €</h4>
+                    <div className="flex justify-center items-center gap-4">
+                        <h4 className="text-center text-gray-900 cursor-default">{plant.price} €</h4>
+                        <BsBagHeartFill 
+                            className='text-2xl text-myLightRed hover:text-red-600'
+                            onClick={() => addFavorite(plant)}
+                        />
+                    </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(plant)}>
                     Aggiungi al carrello
                     </Button>
@@ -132,6 +154,7 @@ export default function PlantDetails({ setCartItems }) {
                     </div>
                 </div>
             </div>
+            <PlantCommentAreaComponent plantId={id} />
             {/*La parte sottostante per ingrandire l'immagine*/}
             {zoomImage && 
             <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-80 flex justify-center items-center z-[1001]'>

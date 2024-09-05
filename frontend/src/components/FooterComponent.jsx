@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Footer } from 'flowbite-react';
+import TermsAndConditionsComponent from './TermsAndConditionsComponent';
 
 export default function FooterComponent() {
+  // useState per gestire apertura/chiusura del Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <Footer container className='mt-auto bg-myGreen' style={{ borderRadius: 0 }}>
-        <Footer.Copyright href='#' by='Flowbite™' year={2022} />
+        <Link to='/' className='text-3xl font-dancingScript text-red-500'>La Sughera</Link>
         <Footer.LinkGroup>
-            <Footer.Link href='#'>About</Footer.Link>
-            <Footer.Link href='#'>Privacy Policy</Footer.Link>
-            <Footer.Link href='#'>Licensing</Footer.Link>
-            <Footer.Link href='#'>Contact</Footer.Link>
+            <Footer.Link as={Link} to='/about'>Chi Siamo</Footer.Link>
+            <Footer.Link as={Link} to='/contact'>Contatti</Footer.Link>
+            <Footer.Link className='cursor-pointer' onClick={() => setIsModalOpen(true)}>Termini e condizioni</Footer.Link>
         </Footer.LinkGroup>
+        <TermsAndConditionsComponent
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)}
+        />
     </Footer>
   )
 }

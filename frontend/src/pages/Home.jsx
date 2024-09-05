@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import WelcomeComponent from '../components/WelcomeComponent';
 import { Carousel, Card } from 'flowbite-react';
-import CarouselComponent from '../components/CarouselComponent';
+import { Carousel1, Carousel2, Carousel3 } from '../components/CarouselComponent';
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
 import { productApi, plantApi } from '../services/api';
 
@@ -11,6 +11,11 @@ export default function Home({ setCategoryFromHome }) {
   const [habitatImages, setHabitatImages] = useState([]);
   const [categoryImages, setCategoryImages] = useState([]);
   const [cardData, setCardData] = useState([]);
+  const [carouselImages, setCarouselImages] = useState([
+    {imagesGroup1: [], plantIds: []},
+    {imagesGroup2: [], plantIds: []},
+    {imagesGroup3: [], plantIds: []},
+  ]);
 
   useEffect(() => {
     fetchPlants();
@@ -110,13 +115,67 @@ export default function Home({ setCategoryFromHome }) {
     try {
       const response = await plantApi.getAll();
       const dataResponse = response.data;
+      const plantsWithComments = dataResponse.filter(data => data.comments.length > 0);
+      const plantsWithoutComments = dataResponse.filter(data => data.comments.length === 0);
       const indoorPlant = dataResponse.find(data => data.habitat === 'indoor');
       const outdoorPlant = dataResponse.find(data => data.habitat === 'outdoor');
       const succulentPlant = dataResponse.find(data => data.category === 'succulentiResistenti');
       const specialPlant = dataResponse.find(data => data.category === 'speciali');
       const usefulPlant = dataResponse.find(data => data.category === 'utili');
       const seasonalAndPerennialPlant = dataResponse.find(data => data.category === 'stagionaliPerenni');
-    
+      console.log(plantsWithComments);
+
+      if (plantsWithComments.length <= 12) {
+        let imagesAndIds = plantsWithComments.map((plantWithComments) => ({
+          image: plantWithComments.image,
+          id: plantWithComments._id
+        }));
+        let i = 0;
+        while (imagesAndIds.length < 12 && i < plantsWithoutComments.length) {
+          imagesAndIds.push({
+            image: plantsWithoutComments[i].image,
+            id: plantsWithoutComments[i]._id
+          });
+          i++;
+        }
+        setCarouselImages([
+          {
+            imagesGroup1: imagesAndIds.slice(0, 4).map(item => item.image),
+            plantIds: imagesAndIds.slice(0, 4).map(item => item.id)
+          },
+          {
+            imagesGroup2: imagesAndIds.slice(4, 8).map(item => item.image),
+            plantIds: imagesAndIds.slice(4, 8).map(item => item.id)
+          },
+          {
+            imagesGroup3: imagesAndIds.slice(8, 12).map(item => item.image),
+            plantIds: imagesAndIds.slice(8, 12).map(item => item.id)
+          }
+        ]);
+      } else if (plantsWithComments.length > 12) { // VERIFICARE SE FUNZIONA
+        let imagesIdsAndRatings = plantsWithComments.map((plantWithComments) => ({
+          image: plantWithComments.image,
+          id: plantWithComments._id,
+          averageReviews: plantWithComments.comments.reduce((sum, comment) => sum + comment.rating, 0)/plantWithComments.comments.length,
+        }));
+        const sortedRatings = imagesIdsAndRatings.sort((a, b) => b.averageReviews - a.averageReviews);
+        const top12RatedPlants = sortedRatings.slice(0, 12);
+        setCarouselImages([
+          {
+            imagesGroup1: top12RatedPlants.slice(0, 4).map(item => item.image),
+            plantIds: top12RatedPlants.slice(0, 4).map(item => item.id)
+          },
+          {
+            imagesGroup2: top12RatedPlants.slice(4, 8).map(item => item.image),
+            plantIds: top12RatedPlants.slice(4, 8).map(item => item.id)
+          },
+          {
+            imagesGroup3: top12RatedPlants.slice(8, 12).map(item => item.image),
+            plantIds: top12RatedPlants.slice(8, 12).map(item => item.id)
+          }
+        ]);
+      }
+
       if (indoorPlant && outdoorPlant) {
         setHabitatImages([indoorPlant.image, outdoorPlant.image]);
       }
@@ -155,10 +214,9 @@ export default function Home({ setCategoryFromHome }) {
       <WelcomeComponent />
       <div className="max-w-[60em] px-4 sm:px-6 lg:px-8 mx-auto">
         <Carousel slide={false} leftControl={customLeftControl} rightControl={customRightControl} className="h-[20em]">
-          <CarouselComponent />
-          <CarouselComponent />
-          <CarouselComponent />
-          <CarouselComponent />
+          <Carousel1 group1={carouselImages[0]}/>
+          <Carousel2 group2={carouselImages[1]}/>
+          <Carousel3 group3={carouselImages[2]}/>
         </Carousel>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 m-12'>
           {cardData.map((card, index) => (

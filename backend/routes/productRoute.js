@@ -1,5 +1,6 @@
 import express from 'express';
 import Product from '../models/Product.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 import cloudinaryUploader from '../config/cloudinaryConfig.js';
 
 const router = express.Router();
@@ -105,13 +106,18 @@ router.get('/search/:query', async (req, res) => {
 });
 
 // POST aggiungi un commento ad un prodotto
-router.post('/:id/comments', async (req, res) => {
+router.post('/:id/comments', authMiddleware, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Prodotto non trovato' });
     }
-    product.comments.push(req.body);
+    const newComment = {
+      text: req.body.text,
+      rating: req.body.rating,
+      user: req.user._id  // Associa l'ID dell'utente autenticato al commento
+    };
+    product.comments.push(newComment);
     await product.save();
     res.status(201).json(product);
   } catch (error) {
@@ -122,7 +128,7 @@ router.post('/:id/comments', async (req, res) => {
 // GET tutti i commenti di un prodotto
 router.get('/:id/comments', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('comments.user', 'username');
     if (!product) {
       return res.status(404).json({ message: 'Prodotto non trovato' });
     }

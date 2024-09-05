@@ -13,7 +13,10 @@ import ProductDetails from './pages/ProductDetails';
 import PlantDetails from './pages/PlantDetails';
 import PlantsAndProducts from './pages/PlantsAndProducts';
 import UserSettings from './pages/UserSettings';
-import TermsAndConditionsComponent from './components/TermsAndConditionsComponent';
+import UserDashboard from './pages/UserDashboard';
+import ProtectedAdminRouteComponent from './components/ProtectedAdminRouteComponent';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import './App.css';
 
 function App() {
@@ -23,16 +26,23 @@ function App() {
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
+  // useState per salvare id e nome pianta/prodotto (per la sezione preferiti)
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem('favorites');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [cartItems, favorites]);
 
   const updateCart = (newItems) => {
     setCartItems(newItems);
   };
 
   return (
-    <AuthProvider>  {/* Avvolgi l'intera app con AuthProvider */}
+    <AuthProvider>
       <Flowbite theme={{ theme: customTheme }}>
         <div className="flex flex-col min-h-screen">
           <BrowserRouter>
@@ -40,20 +50,27 @@ function App() {
             <Routes>
               <Route path='/' element={<Home setCategoryFromHome={setCategoryFromHome} />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/backoffice' element={<Backoffice />} />
+              <Route path='/login' element={<Login />} />                                   
+              <Route path='/about' element={<About />} />
+              <Route path='/contact' element={<Contact />} />
+              <Route path='/backoffice' element={
+                <ProtectedAdminRouteComponent>
+                  <Backoffice />
+                </ProtectedAdminRouteComponent>
+              } />
               <Route 
                 path='/pricing' 
                 element={<PlantsAndProducts 
                   categoryFromHome={categoryFromHome} 
                   setCategoryFromHome={setCategoryFromHome} 
-                  setCartItems={setCartItems} 
-                />} 
+                  setCartItems={setCartItems}
+                  setFavorites={setFavorites}
+                />}
               />
-              <Route path='/product/details/:id' element={<ProductDetails setCartItems={updateCart} />} />
-              <Route path='/plant/details/:id' element={<PlantDetails setCartItems={updateCart} />} />
+              <Route path='/product/details/:id' element={<ProductDetails setCartItems={updateCart} setFavorites={setFavorites}/>} />
+              <Route path='/plant/details/:id' element={<PlantDetails setCartItems={updateCart} setFavorites={setFavorites}/>} />
               <Route path='/user/settings' element={<UserSettings />} />
-              <Route path='/termsAndConditions' element={<TermsAndConditionsComponent />} />
+              <Route path='/user/dashboard' element={<UserDashboard favorites={favorites}/>} />
             </Routes>
             <FooterComponent />
           </BrowserRouter>
