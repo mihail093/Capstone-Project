@@ -5,23 +5,40 @@ import { productApi } from '../services/api';
 import ProductCommentAreaComponent from '../components/ProductCommentAreaComponent';
 import { BsBagHeartFill } from "react-icons/bs";
 
-export default function ProductDetails({ setCartItems, setFavorites }) {
-    // useState per salvarci i dati relativi al prodotto
+export default function ProductDetails({ setCartItems, setFavorites, favorites }) {
     const [product, setProduct] = useState(null);
-    // useParams per recuperare l'id del prodotto
     const { id } = useParams();
+    const [isFavorite, setIsFavorite] = useState(false);
 
-    // Funzione per aggiungere un nuovo preferito
-    const addFavorite = (product) => {
-        setFavorites(prevFavorites => {
-            // Controlla se il prodotto è già nei preferiti
-            const isAlreadyFavorite = prevFavorites.some(fav => fav.id === product._id);
-            if (isAlreadyFavorite) {
-                // Se è già nei preferiti, non fare nulla
-                return prevFavorites;
+    useEffect(() => {
+        const fetchProductDetails = async () => {
+            try {
+                const response = await productApi.getById(id);
+                setProduct(response.data);
+                // Controlla se il prodotto è nei preferiti
+                const isProductFavorite = favorites.some(fav => fav.id === response.data._id);
+                setIsFavorite(isProductFavorite);
+            } catch (error) {
+                console.error('Errore nel recupero dei dettagli del prodotto:', error);
             }
-            // Altrimenti, aggiungi il nuovo preferito
-            return [...prevFavorites, { name: product.name, id: product._id }];
+        };
+
+        fetchProductDetails();
+    }, [id, favorites]);
+
+    const toggleFavorite = (product) => {
+        setFavorites(prevFavorites => {
+            const existingIndex = prevFavorites.findIndex(fav => fav.id === product._id);
+            
+            if (existingIndex !== -1) {
+                // Se è già nei preferiti, lo rimuoviamo
+                setIsFavorite(false);
+                return prevFavorites.filter((_, index) => index !== existingIndex);
+            } else {
+                // Se non è nei preferiti, lo aggiungiamo
+                setIsFavorite(true);
+                return [...prevFavorites, { name: product.name, id: product._id, type: "product" }];
+            }
         });
     };
 
@@ -86,8 +103,8 @@ export default function ProductDetails({ setCartItems, setFavorites }) {
                     <div className="flex justify-center items-center gap-4">
                         <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
                         <BsBagHeartFill 
-                            className='text-2xl text-myLightRed hover:text-red-600'
-                            onClick={() => addFavorite(product)}
+                            className={`text-2xl ${isFavorite ? 'text-myRed' : 'text-myGreen'} cursor-pointer`}
+                            onClick={() => toggleFavorite(product)}
                         />
                     </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>

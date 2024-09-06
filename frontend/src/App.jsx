@@ -26,6 +26,12 @@ function App() {
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
+  // useState per gestire 'Ultimi Acquisti' in Dashboard dell'utente
+  const [latestPurchases, setLatestPurchases] = useState(() => {
+    const savedLatestPurchases = localStorage.getItem('latestPurchases');
+    return savedLatestPurchases ? JSON.parse(savedLatestPurchases) : [];
+  });
+
   // useState per salvare id e nome pianta/prodotto (per la sezione preferiti)
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem('favorites');
@@ -35,7 +41,8 @@ function App() {
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [cartItems, favorites]);
+    localStorage.setItem('latestPurchases', JSON.stringify(latestPurchases));
+  }, [cartItems, favorites, latestPurchases]);
 
   const updateCart = (newItems) => {
     setCartItems(newItems);
@@ -46,7 +53,7 @@ function App() {
       <Flowbite theme={{ theme: customTheme }}>
         <div className="flex flex-col min-h-screen">
           <BrowserRouter>
-            <NavComponent cartItems={cartItems} setCartItems={updateCart} />
+            <NavComponent cartItems={cartItems} setCartItems={updateCart} setLatestPurchases={setLatestPurchases} />
             <Routes>
               <Route path='/' element={<Home setCategoryFromHome={setCategoryFromHome} />} />
               <Route path='/register' element={<Register />} />
@@ -67,10 +74,10 @@ function App() {
                   setFavorites={setFavorites}
                 />}
               />
-              <Route path='/product/details/:id' element={<ProductDetails setCartItems={updateCart} setFavorites={setFavorites}/>} />
-              <Route path='/plant/details/:id' element={<PlantDetails setCartItems={updateCart} setFavorites={setFavorites}/>} />
+              <Route path='/product/details/:id' element={<ProductDetails setCartItems={updateCart} setFavorites={setFavorites} favorites={favorites} />} />
+              <Route path='/plant/details/:id' element={<PlantDetails setCartItems={updateCart} setFavorites={setFavorites} favorites={favorites} />} />
               <Route path='/user/settings' element={<UserSettings />} />
-              <Route path='/user/dashboard' element={<UserDashboard favorites={favorites}/>} />
+              <Route path='/user/dashboard' element={<UserDashboard favorites={favorites} latestPurchases={latestPurchases} />} />
             </Routes>
             <FooterComponent />
           </BrowserRouter>

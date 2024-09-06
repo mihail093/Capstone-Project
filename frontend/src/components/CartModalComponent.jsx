@@ -3,7 +3,7 @@ import { Modal, Button } from 'flowbite-react';
 import { HiOutlineTrash, HiMinus, HiPlus } from "react-icons/hi";
 import { useAuth } from '../utils/AuthContext';
 
-export default function CartModalComponent({ isOpen, onClose, cartItems, setCartItems }) {
+export default function CartModalComponent({ isOpen, onClose, cartItems, setCartItems, setLatestPurchases }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [shippingCosts, setShippingCosts] = useState(0);
@@ -47,6 +47,7 @@ export default function CartModalComponent({ isOpen, onClose, cartItems, setCart
       alert('Il carrello è vuoto!')
     } else {
       onClose();
+      setLatestPurchases(cartItems);
       setCartItems([]);
       alert('ACQUISTO AVVENUTO CON SUCCESSO');
     }

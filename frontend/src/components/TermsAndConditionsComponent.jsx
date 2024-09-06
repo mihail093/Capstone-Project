@@ -10,19 +10,19 @@ export default function TermsAndConditionsComponent({ isOpen, onClose }) {
         <Modal.Body className='bg-myLightBeige'>
           <div className='space-y-6'>
             <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-              With less than a month to go before the European Union enacts new consumer privacy laws for its citizens,
-              companies around the world are updating their terms of service agreements to comply.
+              A meno di un mese dall'entrata in vigore delle nuove leggi sulla privacy dei consumatori dell'Unione Europea per
+              i suoi cittadini, aziende in tutto il mondo stanno aggiornando i loro accordi sui termini di servizio per conformarsi.
             </p>
             <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-              The European Union's General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant
-              to ensure a common set of data rights in the European Union. It requires organizations to notify users as
-              soon as possible of high-risk data breaches that could personally affect them.
+            Il Regolamento Generale sulla Protezione dei Dati (GDPR) dell'Unione Europea entra in vigore il 25 maggio e ha lo scopo
+            di garantire un insieme comune di diritti sui dati nell'Unione Europea. Richiede alle organizzazioni di notificare agli
+            utenti, il prima possibile, le violazioni di dati ad alto rischio che potrebbero influenzarli personalmente.
             </p>
           </div>
         </Modal.Body>
         <Modal.Footer className='bg-myLightBeige'>
-          <Button color='primary' onClick={onClose}>I accept</Button>
-          <Button color='failure' onClick={onClose}>Decline</Button>
+          <Button color='primary' onClick={onClose}>Accetto</Button>
+          <Button color='failure' onClick={onClose}>Rifiuto</Button>
         </Modal.Footer>
       </Modal>
     </>

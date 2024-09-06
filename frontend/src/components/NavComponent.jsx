@@ -6,7 +6,7 @@ import CartModalComponent from './CartModalComponent';
 import { PiShoppingCartSimpleFill } from "react-icons/pi";
 import { useAuth } from '../utils/AuthContext';
 
-export default function NavComponent({ cartItems, setCartItems }) {
+export default function NavComponent({ cartItems, setCartItems, setLatestPurchases }) {
     // useState per gestire apertura/chiusura del Modal carrello
     const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -98,6 +98,7 @@ export default function NavComponent({ cartItems, setCartItems }) {
                 onClose={() => setIsCartOpen(false)}
                 cartItems={cartItems}
                 setCartItems={setCartItems}
+                setLatestPurchases={setLatestPurchases}
             />
         </Navbar>
     );

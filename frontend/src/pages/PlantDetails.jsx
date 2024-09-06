@@ -12,39 +12,46 @@ import PlantCareIndicator from '../components/PlantCareIndicator';
 import PlantCommentAreaComponent from '../components/PlantCommentAreaComponent';
 import backgroundImageAvif from '../assets/photo-1540927550647-43699cb14916.avif';
 
-export default function PlantDetails({ setCartItems, setFavorites }) {
+export default function PlantDetails({ setCartItems, setFavorites, favorites }) {
     const [plant, setPlant] = useState(null);
     const { id } = useParams();
-
-    // Funzione per aggiungere un nuovo preferito
-    const addFavorite = (plant) => {
-        setFavorites(prevFavorites => {
-            // Controlla se il prodotto è già nei preferiti
-            const isAlreadyFavorite = prevFavorites.some(fav => fav.id === plant._id);
-            if (isAlreadyFavorite) {
-                // Se è già nei preferiti, non fare nulla
-                return prevFavorites;
-            }
-            // Altrimenti, aggiungi il nuovo preferito
-            return [...prevFavorites, { name: plant.name, id: plant._id }];
-        });
-    };
-
+    // useState per gestire il colore dell'icona BsBagHeartFill
+    const[isFavorite, setIsFavorite] = useState();
     //useState per ingrandire l'immagine
     const [zoomImage, setZoomImage] = useState(false);
+
 
     useEffect(() => {
         const fetchPlantDetails = async () => {
             try {
                 const response = await plantApi.getById(id);
                 setPlant(response.data);
+                // Controlla se la pianta è nei preferiti
+                const isPlantFavorite = favorites.some(fav => fav.id === response.data._id);
+                setIsFavorite(isPlantFavorite);
             } catch (error) {
                 console.error('Errore nel recupero dei dettagli della pianta:', error);
             }
         };
 
         fetchPlantDetails();
-    }, [id]);
+    }, [id, favorites]);
+
+    const toggleFavorite = (plant) => {
+        setFavorites(prevFavorites => {
+            const existingIndex = prevFavorites.findIndex(fav => fav.id === plant._id);
+            
+            if (existingIndex !== -1) {
+                // Se è già nei preferiti, lo rimuoviamo
+                setIsFavorite(false);
+                return prevFavorites.filter((_, index) => index !== existingIndex);
+            } else {
+                // Se non è nei preferiti, lo aggiungiamo
+                setIsFavorite(true);
+                return [...prevFavorites, { name: plant.name, id: plant._id, type: "plant" }];
+            }
+        });
+    };
 
     if (!plant) {
         return (
@@ -99,8 +106,8 @@ export default function PlantDetails({ setCartItems, setFavorites }) {
                     <div className="flex justify-center items-center gap-4">
                         <h4 className="text-center text-gray-900 cursor-default">{plant.price} €</h4>
                         <BsBagHeartFill 
-                            className='text-2xl text-myLightRed hover:text-red-600'
-                            onClick={() => addFavorite(plant)}
+                            className={`text-2xl ${isFavorite ? 'text-myRed' : 'text-myGreen'} cursor-pointer`}
+                            onClick={() => toggleFavorite(plant)}
                         />
                     </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(plant)}>
