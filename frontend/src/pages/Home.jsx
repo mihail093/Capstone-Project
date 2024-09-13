@@ -18,6 +18,7 @@ export default function Home({ setCategoryFromHome }) {
   ]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchPlants();
     fetchProducts();
   }, []);
@@ -123,7 +124,6 @@ export default function Home({ setCategoryFromHome }) {
       const specialPlant = dataResponse.find(data => data.category === 'speciali');
       const usefulPlant = dataResponse.find(data => data.category === 'utili');
       const seasonalAndPerennialPlant = dataResponse.find(data => data.category === 'stagionaliPerenni');
-      console.log(plantsWithComments);
 
       if (plantsWithComments.length <= 12) {
         let imagesAndIds = plantsWithComments.map((plantWithComments) => ({
@@ -227,13 +227,11 @@ export default function Home({ setCategoryFromHome }) {
               >
                 <img  className="w-full h-48 object-contain" src={card.imgSrc} alt={card.imgAlt} />
                 <h5 className="text-2xl font-title tracking-tight text-gray-900">{card.title}</h5>
-                <p className="text-gray-700">
-                  <ul>
-                    {card.items.map((item, itemIndex) => (
-                      <li key={itemIndex}>{item}</li>
-                    ))}
-                  </ul>
-                </p>
+                <ul className="text-gray-700">
+                  {card.items.map((item, itemIndex) => (
+                    <li key={itemIndex}>{item}</li>
+                  ))}
+                </ul>
               </Card>
             </Link>
           ))}

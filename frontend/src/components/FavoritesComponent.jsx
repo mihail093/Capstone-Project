@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Modal, Button } from 'flowbite-react';
 
-export default function FavoritesComponent({ isOpen, onClose, favorites }) {
+export default function FavoritesComponent({ isOpen, onClose, userFavorites }) {
 
   const [itemTypes, setItemTypes] = useState({});
 
@@ -10,14 +10,14 @@ export default function FavoritesComponent({ isOpen, onClose, favorites }) {
     // Questa funzione determina il tipo di item per ciascun preferito
     const determineItemTypes = () => {
       const types = {};
-      favorites.forEach(favorite => {
+      userFavorites.forEach(favorite => {
         types[favorite.id] = favorite.type === 'plant' ? 'plant' : 'product';
       });
       setItemTypes(types);
     };
 
     determineItemTypes();
-  }, [favorites]);
+  }, [userFavorites]);
 
   return (
     <>
@@ -26,7 +26,7 @@ export default function FavoritesComponent({ isOpen, onClose, favorites }) {
         <Modal.Body className='bg-myLightBeige'>
           <div className='space-y-6'>
             <ul>
-              {favorites.map((favorite) => (
+              {userFavorites.map((favorite) => (
                 <Link to={`/${itemTypes[favorite.id]}/details/${favorite.id}`}>
                   <li className='text-center' key={favorite.id}>{favorite.name}</li>
                 </Link>

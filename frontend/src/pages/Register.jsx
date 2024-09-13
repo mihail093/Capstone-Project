@@ -53,8 +53,8 @@ export default function Register() {
         '--bg-image': `url(${logo})`,
       }}
     >
-      <div className="bg-myBeige bg-opacity-10 p-8 rounded-lg ml-[24px]">
-        <h1 className='text-4xl sm:text-5xl font-dancingScript text-red-500 mb-6'>
+      <div className="p-8 ml-[24px] -mt-10">
+        <h1 className='text-4xl sm:text-5xl font-dancingScript text-red-300 mb-3'>
           La Sughera
         </h1>
         <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col justify-center items-center gap-4">

@@ -11,20 +11,10 @@ export default function WelcomeComponent() {
           La Sughera 
         </h1>
         <h2 className='text-xl sm:text-5xl font-title mb-6'>Il Vostro Angolo di Verde</h2>
-
-        {/*<p className='text-lg sm:text-xl mb-8'>
-          Scoprite la bellezza e la serenità della natura, direttamente a casa vostra. Dalle rigogliose piante da interno alle splendide varietà da esterno, portiamo il vibrante mondo del verde sulla vostra soglia.
-        </p>
-        
-        <p className='text-lg sm:text-xl mb-8'>
-          Abbracciate la gioia di coltivare la vita, purificate il vostro spazio e arricchite il vostro ambiente con la nostra selezione accurata di piante.
-        </p>*/}
         <GrowingPlant />
-        
         <h2 className='text-2xl font-title sm:text-3xl font-bold mb-4'>
           Iniziate oggi il vostro viaggio verde
         </h2>
-        
         <p className='text-2xl font-accent mb-8'>
           Perché ogni foglia racconta una storia, e ogni pianta ha una casa.
         </p>

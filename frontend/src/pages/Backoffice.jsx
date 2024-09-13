@@ -88,13 +88,10 @@ export default function Backoffice() {
         try {
             let response;
             if (editingPlant) {
-                console.log('Updating plant:', editingPlant._id);
                 response = await plantApi.update(editingPlant._id, plantData);
             } else {
-                console.log('Creating new plant');
                 response = await plantApi.create(plantData);
             }
-            console.log('Server response:', response);
             fetchPlants();
             setEditingPlant(null);
         } catch (error) {
@@ -110,13 +107,10 @@ export default function Backoffice() {
         try {
             let response;
             if (editingProduct) {
-                console.log('Updating product:', editingProduct._id);
                 response = await productApi.update(editingProduct._id, productData);
             } else {
-                console.log('Creating new product');
                 response = await productApi.create(productData);
             }
-            console.log('Server response:', response);
             fetchProducts();
             setEditingProduct(null);
         } catch (error) {
@@ -172,57 +166,49 @@ export default function Backoffice() {
             </div>
             {plantForm ? (
                 <>
-                    <div ref={topRef} className="flex items-start space-x-4">
-                        <div className="flex-grow overflow-x-auto">
-                            <PlantListComponent
-                                plants={plants}
-                                onEdit={setEditingPlant}
-                                onDelete={handlePlantDelete}
-                            />
-                        </div>
-                        <Button color="primary" onClick={scrollToBottom} className="mt-4">
-                            <PiArrowFatLinesDownFill className="h-5 w-5" />
-                        </Button>
+                    <Button color="primary" onClick={scrollToBottom} className="m-2">
+                        <PiArrowFatLinesDownFill className="h-5 w-5" />
+                    </Button>
+                    <div ref={topRef}>
+                        <PlantListComponent
+                            plants={plants}
+                            onEdit={setEditingPlant}
+                            onDelete={handlePlantDelete}
+                        />
                     </div>
-                    <div ref={bottomRef} className="flex items-end space-x-4">
-                        <div className="flex-grow overflow-x-auto">
-                            <PlantFormComponent
-                                habitat={habitat} 
-                                setHabitat={setHabitat}
-                                onSubmit={handlePlantSubmit} 
-                                initialData={editingPlant}
-                            />
-                        </div>
-                        <Button color="primary" onClick={scrollToTop} className="mt-4">
-                            <PiArrowFatLinesUpFill className="h-5 w-5" />
-                        </Button>
+                    <div ref={bottomRef}>
+                        <PlantFormComponent
+                            habitat={habitat} 
+                            setHabitat={setHabitat}
+                            onSubmit={handlePlantSubmit} 
+                            initialData={editingPlant}
+                        />
                     </div>
+                    <Button color="primary" onClick={scrollToTop} className="m-2">
+                        <PiArrowFatLinesUpFill className="h-5 w-5" />
+                    </Button>
                 </>
             ) : (
                 <>
-                    <div ref={topRef} className="flex items-start space-x-4">
-                        <div className="flex-grow overflow-x-auto">
-                            <ProductListComponent 
-                                products={products}
-                                onEdit={setEditingProduct}
-                                onDelete={handleProductDelete}
-                            />
-                        </div>
-                        <Button color="primary" onClick={scrollToBottom} className="mt-4">
-                            <PiArrowFatLinesDownFill className="h-5 w-5" />
-                        </Button>
+                    <Button color="primary" onClick={scrollToBottom} className="m-2">
+                        <PiArrowFatLinesDownFill className="h-5 w-5" />
+                    </Button>
+                    <div ref={topRef}>
+                        <ProductListComponent 
+                            products={products}
+                            onEdit={setEditingProduct}
+                            onDelete={handleProductDelete}
+                        />
                     </div>
-                    <div ref={bottomRef} className="flex items-end space-x-4">
-                        <div className="flex-grow overflow-x-auto">
-                            <ProductFormComponent 
-                                onSubmit={handleProductSubmit}
-                                initialData={editingProduct}
-                            />
-                        </div>
-                        <Button color="primary" onClick={scrollToTop} className="mt-4">
-                            <PiArrowFatLinesUpFill className="h-5 w-5" />
-                        </Button>
+                    <div ref={bottomRef}>
+                        <ProductFormComponent 
+                            onSubmit={handleProductSubmit}
+                            initialData={editingProduct}
+                        />
                     </div>
+                    <Button color="primary" onClick={scrollToTop} className="m-2">
+                        <PiArrowFatLinesUpFill className="h-5 w-5" />
+                    </Button>
                 </>
             )}
             <Modal show={openModal} onClose={() => setOpenModal(false)}>

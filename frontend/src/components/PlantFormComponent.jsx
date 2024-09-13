@@ -111,11 +111,6 @@ export default function PlantFormComponent({ setHabitat, onSubmit, initialData }
             plantData.append('_id', initialData._id);
         }
         
-        console.log('Submitting plant data:');
-        for (let [key, value] of plantData.entries()) {
-            console.log(key, value);
-        }
-        
         onSubmit(plantData);
         
         // Reset del form dopo l'invio
@@ -140,7 +135,7 @@ export default function PlantFormComponent({ setHabitat, onSubmit, initialData }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col gap-4 px-8 py-6">
+        <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col gap-4 py-6 mx-2">
             <div>
                 <Label htmlFor="name" value="Nome" />
                 <TextInput 

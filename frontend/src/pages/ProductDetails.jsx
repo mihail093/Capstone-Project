@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, Alert, Button } from "flowbite-react";
 import { useParams } from 'react-router-dom';
 import { productApi } from '../services/api';
+import { useAuth } from '../utils/AuthContext';
 import ProductCommentAreaComponent from '../components/ProductCommentAreaComponent';
 import { BsBagHeartFill } from "react-icons/bs";
 
 export default function ProductDetails({ setCartItems, setFavorites, favorites }) {
+    const { user } = useAuth();
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const [isFavorite, setIsFavorite] = useState(false);
@@ -26,7 +28,7 @@ export default function ProductDetails({ setCartItems, setFavorites, favorites }
         fetchProductDetails();
     }, [id, favorites]);
 
-    const toggleFavorite = (product) => {
+    const toggleFavorite = (product, user) => {
         setFavorites(prevFavorites => {
             const existingIndex = prevFavorites.findIndex(fav => fav.id === product._id);
             
@@ -76,7 +78,7 @@ export default function ProductDetails({ setCartItems, setFavorites, favorites }
                     return cartItem;
                 });
             } else {
-                return [...prevItems, { name: item.name, price: item.price, quantity: 1 }];
+                return [...prevItems, { userId: user._id, name: item.name, price: item.price, quantity: 1 }];
             }
         });
     };
@@ -104,7 +106,7 @@ export default function ProductDetails({ setCartItems, setFavorites, favorites }
                         <h4 className="text-gray-900 cursor-default">{product.price} €</h4>
                         <BsBagHeartFill 
                             className={`text-2xl ${isFavorite ? 'text-myRed' : 'text-myGreen'} cursor-pointer`}
-                            onClick={() => toggleFavorite(product)}
+                            onClick={() => toggleFavorite(product, user)}
                         />
                     </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(product)}>

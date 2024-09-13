@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Dropdown } from 'flowbite-react';
 import SearchBar from '../components/SearchBar';
 import { productApi, plantApi } from '../services/api';
+import { useAuth } from '../utils/AuthContext';
 
 export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHome, setCartItems }) {
+    const { user } = useAuth();
+
     // useState per le PIANTE
     const [plants, setPlants] = useState([]);
 
@@ -115,7 +118,7 @@ export default function PlantsAndProducts({ categoryFromHome, setCategoryFromHom
     return (
         <div className='max-w-4xl mx-auto py-16 text-center'>
             <div>
-                <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} placeholder="Cerca la pianta o il prodotto" />
+                <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} placeholder="Cerca pianta o prodotto" />
                 <Dropdown label="Scegli categoria">
                     <Dropdown.Item onClick={() => handleCategoryClick('indoor')}>Piante da Interno</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleCategoryClick('outdoor')}>Piante da Esterno</Dropdown.Item>

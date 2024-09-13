@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export function Carousel1({ group1 }) {
-  console.log(group1);
   return (
     <div className='grid grid-cols-2 md:grid-cols-4 gap-2 mt-6'>
       <Link to={`/plant/details/${group1.plantIds[0]}`}>

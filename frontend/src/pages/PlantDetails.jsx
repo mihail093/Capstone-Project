@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Card, Alert, Button } from "flowbite-react";
 import { useParams } from 'react-router-dom';
 import { plantApi } from '../services/api';
+import { useAuth } from '../utils/AuthContext';
 // Import di icone
 import { FaTint, FaSeedling, FaSun } from 'react-icons/fa';
 import { GiMedicalThermometer } from "react-icons/gi";
-import { MdOutlineZoomOutMap, MdZoomInMap } from "react-icons/md";
+import { MdOutlineZoomOutMap } from "react-icons/md";
 import { BsBagHeartFill } from "react-icons/bs";
 
+import ImageViewerComponent from '../components/ImageViewerComponent';
 import PlantCareIndicator from '../components/PlantCareIndicator';
 import PlantCommentAreaComponent from '../components/PlantCommentAreaComponent';
 import backgroundImageAvif from '../assets/photo-1540927550647-43699cb14916.avif';
 
 export default function PlantDetails({ setCartItems, setFavorites, favorites }) {
+    const { user } = useAuth();
     const [plant, setPlant] = useState(null);
     const { id } = useParams();
     // useState per gestire il colore dell'icona BsBagHeartFill
@@ -37,7 +40,7 @@ export default function PlantDetails({ setCartItems, setFavorites, favorites }) 
         fetchPlantDetails();
     }, [id, favorites]);
 
-    const toggleFavorite = (plant) => {
+    const toggleFavorite = (plant, user) => {
         setFavorites(prevFavorites => {
             const existingIndex = prevFavorites.findIndex(fav => fav.id === plant._id);
             
@@ -48,7 +51,7 @@ export default function PlantDetails({ setCartItems, setFavorites, favorites }) 
             } else {
                 // Se non è nei preferiti, lo aggiungiamo
                 setIsFavorite(true);
-                return [...prevFavorites, { name: plant.name, id: plant._id, type: "plant" }];
+                return [...prevFavorites, { userId: user._id, name: plant.name, id: plant._id, type: "plant" }];
             }
         });
     };
@@ -96,7 +99,13 @@ export default function PlantDetails({ setCartItems, setFavorites, favorites }) 
                         />
                     <MdOutlineZoomOutMap 
                         className='absolute bottom-2 right-2 text-black text-[18px] cursor-pointer hover:text-[22px]' 
-                        onClick={() => setZoomImage(true)} />
+                        onClick={() => setZoomImage(true)} 
+                    />
+                    <ImageViewerComponent 
+                        images={[plant.image]} 
+                        isOpen={zoomImage} 
+                        onClose={() => setZoomImage(false)} 
+                    />
                     </div>
                     <p className="text-gray-700 text-center mb-4">
                         {plant.description}
@@ -107,7 +116,7 @@ export default function PlantDetails({ setCartItems, setFavorites, favorites }) 
                         <h4 className="text-center text-gray-900 cursor-default">{plant.price} €</h4>
                         <BsBagHeartFill 
                             className={`text-2xl ${isFavorite ? 'text-myRed' : 'text-myGreen'} cursor-pointer`}
-                            onClick={() => toggleFavorite(plant)}
+                            onClick={() => toggleFavorite(plant, user)}
                         />
                     </div>
                     <Button size='md' color="primary" className='m-auto mt-2' onClick={() => manageCart(plant)}>
@@ -162,12 +171,6 @@ export default function PlantDetails({ setCartItems, setFavorites, favorites }) 
                 </div>
             </div>
             <PlantCommentAreaComponent plantId={id} />
-            {/*La parte sottostante per ingrandire l'immagine*/}
-            {zoomImage && 
-            <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-80 flex justify-center items-center z-[1001]'>
-                <MdZoomInMap className='text-red-500 hover:text-red-800 text-[40px] ' onClick={() => setZoomImage(false)} />
-                <img className='max-w-[90%] max-h-[90%]' src={plant.image} alt={plant.name} />
-            </div>}
         </div>
     );
 }

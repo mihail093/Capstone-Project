@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../assets/LOGO.jpg';
 import { Avatar } from "flowbite-react";
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,9 @@ export default function UserDashboard({ favorites, latestPurchases }) {
     // Estraggo 'user' e 'logout' dal contesto di autenticazione
     const { user, logout } = useAuth();
 
+    // useState per salvare i Preferiti dell'utente loggato
+    const [userFavorites, setUserFavorites] = useState([]);
+
     // useState per gestire apertura/chiusura del Modal
     const [isModalFavoritesOpen, setIsModalFavoritesOpen] = useState(false);
 
@@ -18,6 +21,11 @@ export default function UserDashboard({ favorites, latestPurchases }) {
 
     // useNavigate per reindirizzare l'utente alla pagina Home
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const userFavoritesData = favorites.filter(favorite => favorite.userId === user._id);
+        setUserFavorites(userFavoritesData);
+    }, [favorites]);
 
     const logoutFunction = () => {
         navigate('/');
@@ -53,7 +61,7 @@ export default function UserDashboard({ favorites, latestPurchases }) {
         <FavoritesComponent 
             isOpen={isModalFavoritesOpen} 
             onClose={() => setIsModalFavoritesOpen(false)}
-            favorites={favorites}
+            userFavorites={userFavorites}
         />
         <LatestPurchasesComponent
             isOpen={isModalPurchasesOpen} 

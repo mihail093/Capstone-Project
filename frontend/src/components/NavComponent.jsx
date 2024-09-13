@@ -41,7 +41,7 @@ export default function NavComponent({ cartItems, setCartItems, setLatestPurchas
                 </h1>
             </div>
             <div className='flex md:order-2 items-center'>
-                <Button color="primary" onClick={() => setIsCartOpen(true)} className="mr-2">
+                <Button color="primary" onClick={() => setIsCartOpen(true)} className="mt-2 mr-2">
                     <PiShoppingCartSimpleFill className='w-5 h-5 text-myBeige' />
                     <Badge color="failure" className="ml-2 bg-myBeige">{totalItems}</Badge>
                 </Button>
@@ -54,7 +54,7 @@ export default function NavComponent({ cartItems, setCartItems, setLatestPurchas
                                 img={user.avatar}
                                 alt={`${user.username}'s avatar`}
                                 rounded
-                                className='me-2'
+                                className='mt-2 mr-2'
                             />
                         }
                     >
@@ -74,7 +74,7 @@ export default function NavComponent({ cartItems, setCartItems, setLatestPurchas
                             <Avatar 
                                 alt='Default avatar'
                                 rounded
-                                className='me-2'
+                                className='mt-2 mr-2'
                             />
                         }
                     >
@@ -85,12 +85,12 @@ export default function NavComponent({ cartItems, setCartItems, setLatestPurchas
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Link to='/' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Home</Link>
-                <Link to='/about' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Chi Siamo</Link>
-                <Link to='/pricing' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Piante&Prodotti</Link>
-                <Link to='/contact' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Contatti</Link>
+                <Link to='/' className='text-myBeige hover:underline p-2 text-lg'>Home</Link>
+                <Link to='/about' className='text-myBeige hover:underline p-2 text-lg'>Chi Siamo</Link>
+                <Link to='/pricing' className='text-myBeige hover:underline p-2 text-lg'>Piante&Prodotti</Link>
+                <Link to='/contact' className='text-myBeige hover:underline p-2 text-lg'>Contatti</Link>
                 {user && user.role === 'admin' && (
-                    <Link to='/backoffice' className='text-myBeige hover:underline py-2 pl-3 pr-4 text-lg'>Back office</Link>
+                    <Link to='/backoffice' className='text-myBeige hover:underline p-2 text-lg'>Back office</Link>
                 )}
             </Navbar.Collapse>
             <CartModalComponent 

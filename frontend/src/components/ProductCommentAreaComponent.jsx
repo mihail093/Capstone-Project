@@ -64,12 +64,12 @@ export default function ProductCommentAreaComponent({ productId }) {
     }
 
   return (
-    <div className='p-8 rounded-lg shadow-lg'>
+    <div className='bg-myLightBeige p-8 mt-6 rounded-lg shadow-lg'>
       {user ? (
         <>
-          <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col gap-4 px-8 py-6">
+          <form onSubmit={handleSubmit} className="flex max-w-4xl flex-col gap-6 px-8 py-6">
             <div>
-              <Label htmlFor='comment' value='Commento' />
+              <Label className="text-lg font-semibold mb-2 block" htmlFor='comment' value='Commento' />
               <Textarea
                 id='comment'
                 name='comment'
@@ -81,7 +81,7 @@ export default function ProductCommentAreaComponent({ productId }) {
               />
             </div>
             <div>
-              <p>Lascia una Valutazione</p>
+              <p className="text-sm font-semibold mb-2 block">Lascia una Valutazione</p>
               <RatingComponent onRatingChange={handleRatingChange} />
             </div>
             <Button color="primary" size="sm" type="submit" className='w-40' disabled={isLoading}>
@@ -93,7 +93,7 @@ export default function ProductCommentAreaComponent({ productId }) {
             <h3 className="text-xl font-bold mb-4">Commenti</h3>
             {comments.length > 0 ? (
               comments.map((comment, index) => (
-                <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
+                <div key={index} className="mb-4 p-4 bg-myBeige rounded">
                   <p>{comment.text}</p>
                   <p>Valutazione: {comment.rating}/5</p>
                   <p className="text-sm text-gray-600">Utente: {comment.user?.username || 'Anonimo'}</p>
